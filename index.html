@@ -141,10 +141,17 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 .t-card{
   width:100%;background:#fff;border-radius:16px;
   box-shadow:0 4px 24px rgba(0,0,0,0.2);overflow:hidden;
-  cursor:grab;
+  cursor:grab;user-select:none;-webkit-user-select:none;
 }
 .t-card:active{cursor:grabbing;}
-.t-card.dragging{opacity:.5;transform:scale(.95);}
+.t-card.dragging-src{opacity:.3;transform:scale(.96);}
+.drag-clone{
+  position:fixed;z-index:10000;pointer-events:none;
+  opacity:.92;transform:scale(.85);
+  box-shadow:0 16px 48px rgba(0,0,0,0.35);
+  border-radius:16px;overflow:hidden;background:#fff;
+  transition:transform .1s;
+}
 .t-card.slide-in{animation:slideIn .5s cubic-bezier(.4,0,.2,1) forwards;}
 .t-card.slide-out{animation:slideOut .35s cubic-bezier(.4,0,1,1) forwards;}
 .t-card.waiting{transform:translateX(120%);opacity:0;}
@@ -476,10 +483,6 @@ function buildTierRows(){
     const row=document.createElement('div');row.className='tier-row';row.dataset.tier=t.id;
     row.innerHTML=`<div class="tier-row-label" style="background:${t.color}">${t.label}<small>${t.sub}</small></div><div class="tier-row-chips" data-tier="${t.id}"></div>`;
     row.addEventListener('click',()=>placeCurrent(t.id));
-    // Drop handlers
-    row.addEventListener('dragover',e=>{e.preventDefault();e.dataTransfer.dropEffect='move';row.classList.add('drag-over');});
-    row.addEventListener('dragleave',()=>row.classList.remove('drag-over'));
-    row.addEventListener('drop',e=>{e.preventDefault();row.classList.remove('drag-over');placeCurrent(t.id);});
     el.appendChild(row);
   });
 }
@@ -492,16 +495,14 @@ function showCard(){
   const remaining=cardQueue.filter(c=>!placements[c.id]);
   if(!remaining.length){area.innerHTML=`<div class="t-card-empty">모든 카드를 배치했어요!</div>`;updateChick();return;}
   const c=remaining[0];
-  area.innerHTML=`<div class="t-card waiting" id="currentCard" draggable="true"><div class="t-card-hint">${c.hint}</div>${buildRC(c.bf)}</div>`;
+  area.innerHTML=`<div class="t-card waiting" id="currentCard"><div class="t-card-hint">${c.hint}</div>${buildRC(c.bf)}</div>`;
   const card=document.getElementById('currentCard');
   if(card){
     requestAnimationFrame(()=>{card.className='t-card slide-in';});
-    card.addEventListener('dragstart',e=>{
-      e.dataTransfer.effectAllowed='move';
-      e.dataTransfer.setData('text/plain','card');
-      setTimeout(()=>card.classList.add('dragging'),0);
-    });
-    card.addEventListener('dragend',()=>card.classList.remove('dragging'));
+    // Custom drag (mouse)
+    card.addEventListener('mousedown',onCardMouseDown);
+    // Custom drag (touch)
+    card.addEventListener('touchstart',onCardTouchStart,{passive:false});
   }
   updateChick();
 }
@@ -538,6 +539,77 @@ function buildRC(bf){
   <div class="rc-sec ${b('cons')}"><span class="rc-tag rc-tag-con">단점</span><div class="rc-text">${d.cons}</div></div>
   <div class="rc-sec ${b('mgmt')}"><span class="rc-tag rc-tag-mgmt">경영진에 바라는 점</span><div class="rc-text">${d.mgmt}</div></div>
   <div class="rc-footer"><span>&#8212; ${d.growth}</span><span class="rc-footer-sep"></span><span>&#x1F44D; ${d.recommend}</span></div></div></div></div>`;
+}
+
+// ===== CUSTOM DRAG =====
+let dragClone=null,dragStarted=false,dragStartX=0,dragStartY=0;
+
+function onCardMouseDown(e){
+  if(animating)return;
+  dragStartX=e.clientX;dragStartY=e.clientY;dragStarted=false;
+  const onMove=ev=>{
+    if(!dragStarted&&(Math.abs(ev.clientX-dragStartX)>6||Math.abs(ev.clientY-dragStartY)>6)){
+      dragStarted=true;startClone(ev.clientX,ev.clientY);
+    }
+    if(dragStarted)moveClone(ev.clientX,ev.clientY);
+  };
+  const onUp=ev=>{
+    document.removeEventListener('mousemove',onMove);
+    document.removeEventListener('mouseup',onUp);
+    if(dragStarted)endDrag(ev.clientX,ev.clientY);
+  };
+  document.addEventListener('mousemove',onMove);
+  document.addEventListener('mouseup',onUp);
+}
+
+function onCardTouchStart(e){
+  if(animating)return;
+  const t=e.touches[0];dragStartX=t.clientX;dragStartY=t.clientY;dragStarted=false;
+  const onMove=ev=>{
+    const t2=ev.touches[0];
+    if(!dragStarted&&(Math.abs(t2.clientX-dragStartX)>6||Math.abs(t2.clientY-dragStartY)>6)){
+      dragStarted=true;startClone(t2.clientX,t2.clientY);
+    }
+    if(dragStarted){moveClone(t2.clientX,t2.clientY);ev.preventDefault();}
+  };
+  const onEnd=ev=>{
+    document.removeEventListener('touchmove',onMove);
+    document.removeEventListener('touchend',onEnd);
+    if(dragStarted){const t2=ev.changedTouches[0];endDrag(t2.clientX,t2.clientY);}
+  };
+  document.addEventListener('touchmove',onMove,{passive:false});
+  document.addEventListener('touchend',onEnd);
+}
+
+function startClone(x,y){
+  const card=document.getElementById('currentCard');if(!card)return;
+  card.classList.add('dragging-src');
+  dragClone=card.cloneNode(true);
+  dragClone.className='drag-clone';
+  dragClone.style.width=card.offsetWidth+'px';
+  dragClone.style.left=(x-card.offsetWidth/2)+'px';
+  dragClone.style.top=(y-40)+'px';
+  document.body.appendChild(dragClone);
+}
+
+function moveClone(x,y){
+  if(!dragClone)return;
+  dragClone.style.left=(x-dragClone.offsetWidth/2)+'px';
+  dragClone.style.top=(y-40)+'px';
+  // Highlight tier row under cursor
+  document.querySelectorAll('.tier-row').forEach(r=>r.classList.remove('drag-over'));
+  const el=document.elementFromPoint(x,y);
+  if(el){const row=el.closest('.tier-row');if(row)row.classList.add('drag-over');}
+}
+
+function endDrag(x,y){
+  document.querySelectorAll('.tier-row').forEach(r=>r.classList.remove('drag-over'));
+  const card=document.getElementById('currentCard');
+  if(card)card.classList.remove('dragging-src');
+  if(dragClone){dragClone.remove();dragClone=null;}
+  // Find tier row at drop point
+  const el=document.elementFromPoint(x,y);
+  if(el){const row=el.closest('.tier-row');if(row)placeCurrent(row.dataset.tier);}
 }
 
 // Chick
