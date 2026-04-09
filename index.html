@@ -85,10 +85,10 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 /* ===== TIER SCREEN ===== */
 #tierScreen{overflow:hidden;}
 .t-header{
-  display:flex;justify-content:space-between;align-items:center;
+  display:flex;justify-content:center;
   padding:14px 24px;border-bottom:1px solid #2E3038;flex-shrink:0;background:#191B20;
 }
-.t-header-inner{display:flex;justify-content:space-between;align-items:center;width:100%;}
+.t-header-inner{display:flex;justify-content:space-between;align-items:center;max-width:1060px;width:100%;}
 .t-header h2{font-size:17px;font-weight:700;}
 .t-submit{
   padding:10px 24px;border:none;border-radius:12px;
@@ -97,10 +97,10 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 }
 .t-submit.ready{background:#3182F6;color:#fff;cursor:pointer;}
 .t-submit.ready:hover{background:#1B6CF2;}
-.t-body{flex:1;display:flex;min-height:0;}
+.t-body{flex:1;display:flex;min-height:0;max-width:1060px;margin:0 auto;width:100%;}
 
 /* LEFT: Tier Table */
-.t-left{flex:1;display:flex;flex-direction:column;border-right:1px solid #2E3038;min-width:0;}
+.t-left{width:580px;min-width:0;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid #2E3038;}
 .tier-row{
   flex:1;display:flex;align-items:center;padding:0 20px;cursor:pointer;
   transition:all .15s;position:relative;border-bottom:1px solid rgba(0,0,0,0.06);
@@ -109,7 +109,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 .tier-row:hover{filter:brightness(1.08);}
 .tier-row.highlight{filter:brightness(1.15);box-shadow:inset 0 0 0 2px rgba(255,255,255,0.25);}
 .tier-row-label{
-  width:160px;min-width:160px;font-size:15px;font-weight:700;color:#191B20;
+  width:150px;min-width:150px;font-size:14px;font-weight:700;color:#191B20;
   display:flex;flex-direction:column;
 }
 .tier-row-label small{font-size:11px;font-weight:400;opacity:.5;margin-top:2px;}
@@ -124,24 +124,27 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 
 /* RIGHT: Card + Chick */
 .t-right{
-  width:420px;min-width:420px;display:flex;flex-direction:column;
-  padding:24px;position:relative;background:#191B20;
+  flex:1;display:flex;flex-direction:column;
+  padding:20px;position:relative;background:#191B20;
+  min-width:0;
 }
-.t-progress{text-align:center;font-size:15px;font-weight:700;color:#6B6E76;margin-bottom:16px;}
+.t-progress{text-align:center;font-size:15px;font-weight:700;color:#6B6E76;margin-bottom:12px;flex-shrink:0;}
 .t-progress span{color:#3182F6;font-size:20px;}
-.t-card-area{flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.t-card-area{flex:1;position:relative;overflow-y:auto;overflow-x:hidden;min-height:0;}
 .t-card{
-  width:100%;background:#fff;border-radius:20px;
-  box-shadow:0 8px 40px rgba(0,0,0,0.25);overflow:hidden;
+  width:100%;background:#fff;border-radius:16px;
+  box-shadow:0 4px 24px rgba(0,0,0,0.2);overflow:hidden;
 }
 .t-card.slide-in{animation:slideIn .5s cubic-bezier(.4,0,.2,1) forwards;}
 .t-card.slide-out{animation:slideOut .35s cubic-bezier(.4,0,1,1) forwards;}
 .t-card.waiting{transform:translateX(120%);opacity:0;}
 .t-card-hint{
-  padding:12px 20px;background:#F2F4F6;font-size:14px;font-weight:600;
-  color:#3182F6;text-align:center;border-bottom:1px solid #E5E8EB;
+  padding:10px 16px;background:#EBF4FF;font-size:13px;font-weight:700;
+  color:#3182F6;text-align:center;
+  display:flex;align-items:center;justify-content:center;gap:6px;
 }
-.t-card-empty{display:flex;align-items:center;justify-content:center;height:300px;color:#4E5058;font-size:15px;}
+.t-card-hint::before{content:'\\1F50D';font-size:14px;}
+.t-card-empty{display:flex;align-items:center;justify-content:center;height:200px;color:#4E5058;font-size:15px;}
 
 /* Chick */
 .chick-area{
@@ -171,30 +174,30 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 @keyframes chickBreathe{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
 
 /* ===== REVIEW CARD ===== */
-.rc{padding:24px 28px;color:#191B20;}
-.rc-top{display:flex;gap:8px;align-items:center;margin-bottom:6px;}
-.rc-company{font-size:19px;font-weight:700;}
-.rc-meta{display:flex;gap:8px;align-items:center;margin-bottom:16px;font-size:14px;color:#8B95A1;}
-.rc-meta-sep{width:1px;height:12px;background:#E5E8EB;}
-.rc-body{display:flex;gap:24px;}
-.rc-left{width:130px;flex-shrink:0;}
+.rc{padding:18px 20px;color:#191B20;font-size:13px;}
+.rc-top{display:flex;gap:8px;align-items:center;margin-bottom:4px;}
+.rc-company{font-size:16px;font-weight:700;}
+.rc-meta{display:flex;gap:6px;align-items:center;margin-bottom:12px;font-size:12px;color:#8B95A1;}
+.rc-meta-sep{width:1px;height:10px;background:#E5E8EB;}
+.rc-body{display:flex;gap:16px;}
+.rc-left{width:110px;flex-shrink:0;}
 .rc-right{flex:1;min-width:0;}
-.rc-score{font-size:26px;font-weight:800;margin-bottom:4px;}
-.rc-stars{display:flex;gap:2px;margin-bottom:14px;font-size:16px;}
+.rc-score{font-size:22px;font-weight:800;margin-bottom:2px;}
+.rc-stars{display:flex;gap:1px;margin-bottom:10px;font-size:14px;}
 .rc-star-on{color:#00C362;}.rc-star-off{color:#E5E8EB;}
-.rc-det{margin-bottom:8px;}
-.rc-det-l{font-size:12px;color:#4E5058;margin-bottom:3px;}
-.rc-det-bar{width:100px;height:5px;background:#E5E8EB;border-radius:3px;overflow:hidden;}
-.rc-det-fill{height:100%;background:#00C362;border-radius:3px;}
-.rc-title{font-size:17px;font-weight:700;line-height:1.55;margin-bottom:14px;}
-.rc-sec{margin-bottom:12px;}
-.rc-tag{display:inline-block;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;margin-bottom:5px;}
+.rc-det{margin-bottom:6px;}
+.rc-det-l{font-size:11px;color:#4E5058;margin-bottom:2px;}
+.rc-det-bar{width:90px;height:4px;background:#E5E8EB;border-radius:2px;overflow:hidden;}
+.rc-det-fill{height:100%;background:#00C362;border-radius:2px;}
+.rc-title{font-size:14px;font-weight:700;line-height:1.5;margin-bottom:10px;}
+.rc-sec{margin-bottom:8px;}
+.rc-tag{display:inline-block;padding:2px 6px;border-radius:3px;font-size:10px;font-weight:600;margin-bottom:4px;}
 .rc-tag-pro{background:#E8F4FD;color:#3182F6;}
 .rc-tag-con{background:#FFF0F0;color:#F04452;}
 .rc-tag-mgmt{background:#F2F4F6;color:#6B6E76;}
-.rc-text{font-size:14px;color:#333D4B;line-height:1.6;}
-.rc-footer{display:flex;align-items:center;gap:12px;margin-top:14px;padding-top:12px;border-top:1px solid #F2F4F6;font-size:13px;color:#8B95A1;font-weight:500;}
-.rc-footer-sep{width:1px;height:12px;background:#E5E8EB;}
+.rc-text{font-size:12px;color:#333D4B;line-height:1.55;}
+.rc-footer{display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:8px;border-top:1px solid #F2F4F6;font-size:11px;color:#8B95A1;font-weight:500;}
+.rc-footer-sep{width:1px;height:10px;background:#E5E8EB;}
 .blurred{filter:blur(10px);user-select:none;pointer-events:none;}
 
 /* ===== DONE ===== */
@@ -309,9 +312,10 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 
 @media(max-width:960px){
   .t-body{flex-direction:column;}
-  .t-left{border-right:none;border-bottom:1px solid #2E3038;min-height:240px;}
-  .t-right{width:100%;min-width:0;padding:16px;}
-  .tier-row-label{width:110px;min-width:110px;font-size:12px;}
+  .t-left{width:100%;border-right:none;border-bottom:1px solid #2E3038;min-height:200px;flex-shrink:0;}
+  .t-right{flex:1;padding:16px;}
+  .tier-row-label{width:100px;min-width:100px;font-size:11px;}
+  .tier-row-label small{display:none;}
 }
 </style>
 </head>
@@ -328,11 +332,12 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
     <div class="start-chick">
       <div class="start-chick-bubble">어떤게 제일 킹 받을까?</div><br>
       <svg viewBox="0 0 120 80" fill="none" width="100" height="70">
-        <ellipse cx="60" cy="52" rx="48" ry="28" fill="#FFD93D" stroke="#333" stroke-width="2.2"/>
-        <polygon points="10,56 1,52 10,48" fill="#FF9800" stroke="#333" stroke-width="1.8" stroke-linejoin="round"/>
-        <circle cx="72" cy="46" r="2.8" fill="#333"/><circle cx="84" cy="46" r="2.8" fill="#333"/>
-        <ellipse cx="78" cy="52" rx="5" ry="3" fill="#FFB088" opacity="0.5"/>
-        <path d="M38,42 Q50,32 66,40" stroke="#333" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <defs><linearGradient id="cg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFE566"/><stop offset="100%" stop-color="#FFD93D"/></linearGradient></defs>
+        <ellipse cx="60" cy="52" rx="48" ry="28" fill="url(#cg1)"/>
+        <polygon points="10,56 1,52 10,48" fill="#FFA726"/>
+        <circle cx="72" cy="46" r="2.5" fill="#5D4037"/><circle cx="84" cy="46" r="2.5" fill="#5D4037"/>
+        <ellipse cx="78" cy="52" rx="5" ry="3" fill="#FFCC80" opacity="0.6"/>
+        <path d="M38,42 Q50,33 66,40" stroke="#F5C518" stroke-width="2" fill="none" stroke-linecap="round"/>
       </svg>
     </div>
     <div class="start-preview" id="startPreview"></div>
@@ -363,11 +368,12 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
       <div class="chick-area" id="chickArea">
         <div class="chick-bubble" id="chickBubble"></div>
         <svg class="chick-svg" id="chickSvg" viewBox="0 0 120 80" fill="none">
-          <ellipse cx="60" cy="52" rx="48" ry="28" fill="#FFD93D" stroke="#333" stroke-width="2.2"/>
-          <polygon class="chick-beak" points="10,56 1,52 10,48" fill="#FF9800" stroke="#333" stroke-width="1.8" stroke-linejoin="round"/>
-          <circle cx="72" cy="46" r="2.8" fill="#333"/><circle cx="84" cy="46" r="2.8" fill="#333"/>
-          <ellipse cx="78" cy="52" rx="5" ry="3" fill="#FFB088" opacity="0.5"/>
-          <path d="M38,42 Q50,32 66,40" stroke="#333" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <defs><linearGradient id="cg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFE566"/><stop offset="100%" stop-color="#FFD93D"/></linearGradient></defs>
+          <ellipse cx="60" cy="52" rx="48" ry="28" fill="url(#cg2)"/>
+          <polygon class="chick-beak" points="10,56 1,52 10,48" fill="#FFA726"/>
+          <circle cx="72" cy="46" r="2.5" fill="#5D4037"/><circle cx="84" cy="46" r="2.5" fill="#5D4037"/>
+          <ellipse cx="78" cy="52" rx="5" ry="3" fill="#FFCC80" opacity="0.6"/>
+          <path d="M38,42 Q50,33 66,40" stroke="#F5C518" stroke-width="2" fill="none" stroke-linecap="round"/>
         </svg>
       </div>
     </div>
