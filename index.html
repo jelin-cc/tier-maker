@@ -100,32 +100,38 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 .t-body{flex:1;display:flex;min-height:0;max-width:1060px;margin:0 auto;width:100%;}
 
 /* LEFT: Tier Table */
-.t-left{width:580px;min-width:0;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid #2E3038;}
+.t-left{width:600px;flex-shrink:0;display:flex;flex-direction:column;padding:8px;gap:4px;border-right:1px solid #2E3038;}
 .tier-row{
-  flex:1;display:flex;align-items:center;padding:0 20px;cursor:pointer;
-  transition:all .15s;position:relative;border-bottom:1px solid rgba(0,0,0,0.06);
+  flex:1;display:flex;align-items:stretch;cursor:pointer;
+  transition:all .15s;border-radius:12px;overflow:hidden;
 }
-.tier-row:last-child{border-bottom:none;}
-.tier-row:hover{filter:brightness(1.08);}
-.tier-row.highlight{filter:brightness(1.15);box-shadow:inset 0 0 0 2px rgba(255,255,255,0.25);}
+.tier-row:hover .tier-row-chips{background:#2A2C34;}
+.tier-row.highlight .tier-row-chips{background:#333844;box-shadow:0 0 0 2px rgba(255,255,255,0.15) inset;}
 .tier-row-label{
-  width:150px;min-width:150px;font-size:14px;font-weight:700;color:#191B20;
-  display:flex;flex-direction:column;
+  width:140px;min-width:140px;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:12px 16px;font-size:14px;font-weight:700;color:#191B20;
+  border-radius:12px 0 0 12px;
 }
-.tier-row-label small{font-size:11px;font-weight:400;opacity:.5;margin-top:2px;}
-.tier-row-chips{flex:1;display:flex;flex-wrap:wrap;gap:6px;padding:4px 0;}
+.tier-row-label small{font-size:10px;font-weight:400;opacity:.5;margin-top:2px;}
+.tier-row-chips{
+  flex:1;display:flex;flex-wrap:wrap;gap:6px;
+  padding:10px 14px;align-items:center;align-content:center;
+  background:#22242A;transition:background .15s;
+  border-radius:0 12px 12px 0;
+}
 .tier-chip{
-  padding:8px 14px;background:rgba(0,0,0,0.12);border-radius:8px;
-  font-size:13px;font-weight:600;color:#191B20;cursor:pointer;
+  padding:8px 16px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);
+  border-radius:10px;font-size:13px;font-weight:600;color:#ECECEC;cursor:pointer;
   transition:all .15s;white-space:nowrap;
 }
-.tier-chip:hover{background:rgba(0,0,0,0.22);transform:scale(1.05);}
+.tier-chip:hover{background:rgba(255,255,255,0.14);transform:scale(1.05);}
 .tier-chip.removing{animation:chipOut .25s ease forwards;}
 
 /* RIGHT: Card + Chick */
 .t-right{
   flex:1;display:flex;flex-direction:column;
-  padding:20px;position:relative;background:#191B20;
+  padding:20px;position:relative;background:#1E2028;
   min-width:0;
 }
 .t-progress{text-align:center;font-size:15px;font-weight:700;color:#6B6E76;margin-bottom:12px;flex-shrink:0;}
@@ -464,8 +470,8 @@ function startGame(){
 function buildTierRows(){
   const el=document.getElementById('tierLeft');el.innerHTML='';
   TIERS.forEach(t=>{
-    const row=document.createElement('div');row.className='tier-row';row.dataset.tier=t.id;row.style.background=t.color;
-    row.innerHTML=`<div class="tier-row-label">${t.label}<small>${t.sub}</small></div><div class="tier-row-chips" data-tier="${t.id}"></div>`;
+    const row=document.createElement('div');row.className='tier-row';row.dataset.tier=t.id;
+    row.innerHTML=`<div class="tier-row-label" style="background:${t.color}">${t.label}<small>${t.sub}</small></div><div class="tier-row-chips" data-tier="${t.id}"></div>`;
     row.addEventListener('click',()=>placeCurrent(t.id));el.appendChild(row);
   });
 }
