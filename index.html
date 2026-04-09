@@ -127,6 +127,14 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
   transition:all .15s;white-space:nowrap;
 }
 .tier-chip:hover{background:rgba(255,255,255,0.14);transform:scale(1.05);}
+/* Chip preview tooltip */
+.chip-preview{
+  display:none;position:fixed;z-index:200;width:380px;
+  background:#fff;border-radius:14px;overflow:hidden;
+  box-shadow:0 12px 48px rgba(0,0,0,0.45);pointer-events:none;
+  border:1px solid rgba(0,0,0,0.06);
+}
+.chip-preview.visible{display:block;}
 .tier-chip.removing{animation:chipOut .25s ease forwards;}
 
 /* RIGHT: Card + Chick */
@@ -421,6 +429,9 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
   </div>
 </div>
 
+<!-- CHIP PREVIEW -->
+<div class="chip-preview" id="chipPreview"></div>
+
 <!-- MODAL -->
 <div class="modal" id="modal"><div class="modal-box"><div class="modal-top"><h3 id="mTitle"></h3><button class="modal-x" onclick="closeModal()">&times;</button></div><div id="mBody"></div></div></div>
 
@@ -513,7 +524,11 @@ function placeCurrent(tid){
   const card=document.getElementById('currentCard');if(card)card.className='t-card slide-out';
   const ca=document.querySelector(`.tier-row-chips[data-tier="${tid}"]`);
   const chip=document.createElement('div');chip.className='tier-chip';chip.dataset.caseId=c.id;chip.textContent=c.label;
-  chip.addEventListener('click',e=>{e.stopPropagation();removeChip(c.id);});ca.appendChild(chip);
+  chip.addEventListener('click',e=>{e.stopPropagation();removeChip(c.id);});
+  chip.addEventListener('mouseenter',onChipEnter);
+  chip.addEventListener('mousemove',onChipMove);
+  chip.addEventListener('mouseleave',onChipLeave);
+  ca.appendChild(chip);
   const row=document.querySelector(`.tier-row[data-tier="${tid}"]`);
   row.classList.add('highlight');setTimeout(()=>row.classList.remove('highlight'),400);
   const ti=TIERS.findIndex(t=>t.id===tid);
@@ -539,6 +554,26 @@ function buildRC(bf){
   <div class="rc-sec ${b('cons')}"><span class="rc-tag rc-tag-con">단점</span><div class="rc-text">${d.cons}</div></div>
   <div class="rc-sec ${b('mgmt')}"><span class="rc-tag rc-tag-mgmt">경영진에 바라는 점</span><div class="rc-text">${d.mgmt}</div></div>
   <div class="rc-footer"><span>&#8212; ${d.growth}</span><span class="rc-footer-sep"></span><span>&#x1F44D; ${d.recommend}</span></div></div></div></div>`;
+}
+
+// ===== CHIP HOVER PREVIEW =====
+const chipPrev=document.getElementById('chipPreview');
+function onChipEnter(e){
+  const cid=this.dataset.caseId;
+  const c=CASES.find(x=>x.id===cid);if(!c)return;
+  chipPrev.innerHTML=`<div class="t-card-hint">${c.hint}</div>`+buildRC(c.bf);
+  chipPrev.classList.add('visible');
+  posChipPrev(e);
+}
+function onChipMove(e){posChipPrev(e);}
+function onChipLeave(){chipPrev.classList.remove('visible');}
+function posChipPrev(e){
+  const w=chipPrev.offsetWidth,h=chipPrev.offsetHeight;
+  let x=e.clientX+16,y=e.clientY-h/2;
+  if(x+w>innerWidth-8)x=e.clientX-w-16;
+  if(y<8)y=8;
+  if(y+h>innerHeight-8)y=innerHeight-h-8;
+  chipPrev.style.left=x+'px';chipPrev.style.top=y+'px';
 }
 
 // ===== CUSTOM DRAG =====
