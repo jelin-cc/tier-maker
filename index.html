@@ -58,12 +58,15 @@
     margin-bottom: 16px;
     outline: none;
     transition: border-color 0.2s;
+    box-sizing: border-box;
   }
   .start-input:focus { border-color: #ff6b6b; }
   .start-input::placeholder { color: #444; }
   .start-actions { display: flex; flex-direction: column; gap: 12px; align-items: center; margin-top: 8px; }
   .btn-primary {
-    padding: 16px 56px;
+    width: 320px;
+    max-width: 90vw;
+    padding: 16px 20px;
     border: none;
     border-radius: 14px;
     background: linear-gradient(135deg, #ff6b6b, #ee5a24);
@@ -73,6 +76,7 @@
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
     font-family: 'Pretendard', sans-serif;
+    box-sizing: border-box;
   }
   .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,107,107,0.25); }
   .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
