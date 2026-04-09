@@ -106,6 +106,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
   transition:all .15s;border-radius:12px;overflow:hidden;
 }
 .tier-row:hover .tier-row-chips{background:#2A2C34;}
+.tier-row.drag-over .tier-row-chips{background:#333844;box-shadow:0 0 0 2px rgba(255,255,255,0.2) inset;}
 .tier-row.highlight .tier-row-chips{background:#333844;box-shadow:0 0 0 2px rgba(255,255,255,0.15) inset;}
 .tier-row-label{
   width:140px;min-width:140px;
@@ -140,7 +141,10 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 .t-card{
   width:100%;background:#fff;border-radius:16px;
   box-shadow:0 4px 24px rgba(0,0,0,0.2);overflow:hidden;
+  cursor:grab;
 }
+.t-card:active{cursor:grabbing;}
+.t-card.dragging{opacity:.5;transform:scale(.95);}
 .t-card.slide-in{animation:slideIn .5s cubic-bezier(.4,0,.2,1) forwards;}
 .t-card.slide-out{animation:slideOut .35s cubic-bezier(.4,0,1,1) forwards;}
 .t-card.waiting{transform:translateX(120%);opacity:0;}
@@ -470,7 +474,12 @@ function buildTierRows(){
   TIERS.forEach(t=>{
     const row=document.createElement('div');row.className='tier-row';row.dataset.tier=t.id;
     row.innerHTML=`<div class="tier-row-label" style="background:${t.color}">${t.label}<small>${t.sub}</small></div><div class="tier-row-chips" data-tier="${t.id}"></div>`;
-    row.addEventListener('click',()=>placeCurrent(t.id));el.appendChild(row);
+    row.addEventListener('click',()=>placeCurrent(t.id));
+    // Drop handlers
+    row.addEventListener('dragover',e=>{e.preventDefault();e.dataTransfer.dropEffect='move';row.classList.add('drag-over');});
+    row.addEventListener('dragleave',()=>row.classList.remove('drag-over'));
+    row.addEventListener('drop',e=>{e.preventDefault();row.classList.remove('drag-over');placeCurrent(t.id);});
+    el.appendChild(row);
   });
 }
 function showCard(){
@@ -482,8 +491,17 @@ function showCard(){
   const remaining=cardQueue.filter(c=>!placements[c.id]);
   if(!remaining.length){area.innerHTML=`<div class="t-card-empty">모든 카드를 배치했어요!</div>`;updateChick();return;}
   const c=remaining[0];
-  area.innerHTML=`<div class="t-card waiting" id="currentCard"><div class="t-card-hint">${c.hint}</div>${buildRC(c.bf)}</div>`;
-  requestAnimationFrame(()=>{const card=document.getElementById('currentCard');if(card)card.className='t-card slide-in';});
+  area.innerHTML=`<div class="t-card waiting" id="currentCard" draggable="true"><div class="t-card-hint">${c.hint}</div>${buildRC(c.bf)}</div>`;
+  const card=document.getElementById('currentCard');
+  if(card){
+    requestAnimationFrame(()=>{card.className='t-card slide-in';});
+    card.addEventListener('dragstart',e=>{
+      e.dataTransfer.effectAllowed='move';
+      e.dataTransfer.setData('text/plain','card');
+      setTimeout(()=>card.classList.add('dragging'),0);
+    });
+    card.addEventListener('dragend',()=>card.classList.remove('dragging'));
+  }
   updateChick();
 }
 function placeCurrent(tid){
