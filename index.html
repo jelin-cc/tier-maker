@@ -8,11 +8,11 @@
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
   body {
     font-family: 'Pretendard', -apple-system, sans-serif;
-    background: #1a1a2e;
+    background: #0f0f1a;
     color: #e0e0e0;
-    min-height: 100vh;
     overflow-x: hidden;
   }
 
@@ -25,33 +25,32 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 40px 20px;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-  }
-  .start-logo {
-    font-size: 64px;
-    margin-bottom: 16px;
+    padding: 40px 24px;
+    background: linear-gradient(160deg, #0f0f1a 0%, #1a1a2e 40%, #0f3460 100%);
+    gap: 0;
   }
   .start-title {
-    font-size: 36px;
+    font-size: 40px;
     font-weight: 800;
     background: linear-gradient(135deg, #ff6b6b, #ffa502);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
+    line-height: 1.3;
   }
   .start-subtitle {
-    font-size: 16px;
-    color: #a0a0b0;
-    margin-bottom: 40px;
-    line-height: 1.6;
+    font-size: 17px;
+    color: #8a8a9a;
+    margin-bottom: 48px;
+    line-height: 1.7;
   }
   .start-input {
-    width: 300px;
-    padding: 14px 20px;
-    border: 2px solid #333;
-    border-radius: 12px;
-    background: #16213e;
+    width: 320px;
+    max-width: 90vw;
+    padding: 16px 20px;
+    border: 2px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.04);
     color: #fff;
     font-size: 16px;
     font-family: 'Pretendard', sans-serif;
@@ -61,300 +60,310 @@
     transition: border-color 0.2s;
   }
   .start-input:focus { border-color: #ff6b6b; }
-  .start-input::placeholder { color: #555; }
-  .start-btn {
-    padding: 14px 48px;
+  .start-input::placeholder { color: #444; }
+  .start-actions { display: flex; flex-direction: column; gap: 12px; align-items: center; margin-top: 8px; }
+  .btn-primary {
+    padding: 16px 56px;
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
     background: linear-gradient(135deg, #ff6b6b, #ee5a24);
     color: #fff;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
     font-family: 'Pretendard', sans-serif;
   }
-  .start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,107,107,0.3); }
-  .start-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-  .start-nav {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    gap: 12px;
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,107,107,0.25); }
+  .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
+  .start-divider {
+    width: 200px;
+    height: 1px;
+    background: rgba(255,255,255,0.06);
+    margin: 32px 0 24px;
   }
-  .nav-btn {
-    padding: 8px 16px;
-    border: 1px solid #444;
-    border-radius: 8px;
-    background: rgba(255,255,255,0.05);
-    color: #aaa;
-    font-size: 13px;
+  .start-bottom-btns { display: flex; gap: 12px; }
+  .btn-ghost {
+    padding: 12px 28px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    background: transparent;
+    color: #888;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
     font-family: 'Pretendard', sans-serif;
     transition: all 0.2s;
   }
-  .nav-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .btn-ghost:hover { background: rgba(255,255,255,0.05); color: #bbb; border-color: rgba(255,255,255,0.2); }
 
-  /* ===== TIER SCREEN ===== */
-  #tierScreen {
-    padding: 16px;
-    gap: 16px;
+  /* ===== SORT SCREEN (one-at-a-time) ===== */
+  #sortScreen {
+    height: 100vh;
+    overflow: hidden;
   }
-  .tier-header {
+  .sort-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 0;
-  }
-  .tier-header h2 {
-    font-size: 17px;
-    font-weight: 700;
-  }
-  .tier-header .progress {
-    font-size: 14px;
-    color: #aaa;
-  }
-  .tier-header .progress span { color: #ff6b6b; font-weight: 700; }
-  .tier-submit-btn {
-    padding: 8px 24px;
-    border: none;
-    border-radius: 8px;
-    background: #ff6b6b;
-    color: #fff;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: 'Pretendard', sans-serif;
-    transition: all 0.2s;
-    opacity: 0.5;
-  }
-  .tier-submit-btn.ready { opacity: 1; }
-  .tier-submit-btn.ready:hover { background: #ee5a24; transform: translateY(-1px); }
-
-  /* Tier Rows */
-  .tier-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-height: 0;
-  }
-  .tier-row {
-    display: flex;
-    min-height: 110px;
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  .tier-label {
-    width: 140px;
-    min-width: 140px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-weight: 700;
-    font-size: 14px;
-    padding: 10px 8px;
-    text-align: center;
-    color: #000;
-    line-height: 1.4;
-  }
-  .tier-label small {
-    font-size: 10px;
-    font-weight: 500;
-    margin-top: 2px;
-    opacity: 0.6;
-  }
-  .tier-dropzone {
-    flex: 1;
-    background: #2d2d44;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    align-content: flex-start;
-    padding: 6px;
-    gap: 6px;
-    min-height: 110px;
-    transition: background 0.2s;
-  }
-  .tier-dropzone.drag-over { background: #3d3d5c; }
-
-  /* Pool */
-  .pool-section {
-    background: #16213e;
-    border-radius: 12px;
-    padding: 16px;
-  }
-  .pool-title {
-    font-size: 14px;
-    color: #888;
-    margin-bottom: 12px;
-    text-align: center;
-  }
-  .pool-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-    min-height: 60px;
-  }
-  .pool-grid.drag-over { background: rgba(255,255,255,0.03); border-radius: 8px; }
-
-  /* ===== CASE CARD (draggable thumbnail) ===== */
-  .case-card {
-    width: 140px;
-    cursor: grab;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #fff;
-    transition: transform 0.15s, box-shadow 0.15s;
-    user-select: none;
-    -webkit-user-select: none;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
     flex-shrink: 0;
   }
-  .case-card:hover { transform: scale(1.05); box-shadow: 0 4px 16px rgba(0,0,0,0.3); z-index: 10; }
-  .case-card.dragging { opacity: 0.4; transform: scale(0.95); }
-  .case-card-preview {
-    width: 140px;
-    height: 180px;
+  .sort-progress-wrap { display: flex; align-items: center; gap: 12px; }
+  .sort-progress-bar {
+    width: 120px;
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
     overflow: hidden;
-    position: relative;
   }
-  .case-card-label {
-    padding: 6px 8px;
-    background: #1a1a2e;
-    color: #fff;
-    font-size: 11px;
-    font-weight: 600;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .sort-progress-fill {
+    height: 100%;
+    background: #ff6b6b;
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+  .sort-progress-text { font-size: 14px; color: #666; font-weight: 600; }
+  .sort-progress-text span { color: #ff6b6b; }
+  .sort-back-btn {
+    padding: 6px 14px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    background: transparent;
+    color: #777;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+  }
+  .sort-back-btn:hover { color: #bbb; }
+
+  .sort-body {
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    min-height: 0;
   }
 
-  /* ===== MINI REVIEW CARD (inside case-card-preview) ===== */
-  .mini-review {
-    width: 420px;
-    padding: 20px 24px;
-    background: #fff;
-    border-radius: 12px;
-    border: 1px solid #E5E6E9;
-    font-family: 'Pretendard', sans-serif;
-    transform: scale(0.333);
-    transform-origin: top left;
-    color: #323438;
-    position: absolute;
-    top: 0;
-    left: 0;
+  /* Left: Card Preview */
+  .sort-card-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    gap: 20px;
   }
-  .mr-top { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
-  .mr-company { font-size: 20px; font-weight: 700; color: #323438; }
-  .mr-badge {
-    padding: 1px 6px;
+  .sort-card-hint {
+    font-size: 15px;
+    color: #ff6b6b;
+    font-weight: 600;
+    padding: 8px 20px;
+    background: rgba(255,107,107,0.08);
+    border-radius: 100px;
+  }
+  .sort-card-wrapper {
+    width: 520px;
+    max-width: 100%;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  .sort-card-wrapper.exit-left { transform: translateX(-120%) rotate(-5deg); opacity: 0; }
+  .sort-card-wrapper.exit-right { transform: translateX(120%) rotate(5deg); opacity: 0; }
+  .sort-card-wrapper.enter { transform: translateX(40px); opacity: 0; }
+  .sort-card-counter {
+    font-size: 13px;
+    color: #555;
+  }
+
+  /* Right: Tier Buttons */
+  .sort-tier-area {
+    width: 260px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 24px 24px 24px 0;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .sort-tier-label {
+    font-size: 12px;
+    color: #555;
+    text-align: center;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .tier-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.03);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'Pretendard', sans-serif;
+    text-align: left;
+  }
+  .tier-btn:hover { background: rgba(255,255,255,0.07); transform: translateX(-4px); }
+  .tier-btn:active { transform: scale(0.97); }
+  .tier-btn-color {
+    width: 8px;
+    height: 36px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .tier-btn-text { flex: 1; }
+  .tier-btn-main { font-size: 14px; font-weight: 700; color: #ddd; }
+  .tier-btn-sub { font-size: 11px; color: #666; margin-top: 1px; }
+
+  /* ===== REVIEW CARD (full size inside sort) ===== */
+  .review-card {
+    padding: 28px 32px;
+    font-family: 'Pretendard', sans-serif;
+    color: #323438;
+  }
+  .rc-top { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .rc-company { font-size: 20px; font-weight: 700; }
+  .rc-badge {
+    padding: 2px 8px;
     background: #F3F3F4;
     border-radius: 4px;
     font-size: 12px;
     color: #57595B;
   }
-  .mr-meta {
+  .rc-meta {
     display: flex;
     gap: 8px;
     align-items: center;
-    margin-bottom: 14px;
+    margin-bottom: 18px;
     font-size: 14px;
     color: #85878C;
   }
-  .mr-meta-sep { width: 1px; height: 12px; background: #E5E6E9; }
-  .mr-body { display: flex; gap: 24px; }
-  .mr-left { width: 150px; flex-shrink: 0; }
-  .mr-right { flex: 1; min-width: 0; }
-  .mr-score { font-size: 24px; font-weight: 700; color: #323438; margin-bottom: 4px; }
-  .mr-stars { display: flex; gap: 2px; margin-bottom: 16px; }
-  .mr-star { width: 16px; height: 16px; }
-  .mr-star.filled { color: #00C362; }
-  .mr-star.empty { color: #E5E6E9; }
-  .mr-detail-item { margin-bottom: 10px; }
-  .mr-detail-label { font-size: 12px; color: #323438; margin-bottom: 4px; }
-  .mr-detail-bar {
-    width: 100px;
+  .rc-meta-sep { width: 1px; height: 12px; background: #E5E6E9; }
+  .rc-body { display: flex; gap: 28px; }
+  .rc-left { width: 150px; flex-shrink: 0; }
+  .rc-right { flex: 1; min-width: 0; }
+  .rc-score { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+  .rc-stars { display: flex; gap: 2px; margin-bottom: 18px; font-size: 18px; }
+  .rc-star-filled { color: #00C362; }
+  .rc-star-empty { color: #E5E6E9; }
+  .rc-detail-item { margin-bottom: 10px; }
+  .rc-detail-label { font-size: 12px; color: #323438; margin-bottom: 4px; }
+  .rc-detail-bar {
+    width: 110px;
     height: 6px;
     background: #E5E6E9;
-    border-radius: 2px;
-    position: relative;
+    border-radius: 3px;
     overflow: hidden;
   }
-  .mr-detail-fill {
-    height: 6px;
-    background: #00C362;
-    border-radius: 2px;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-  .mr-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #323438;
-    line-height: 1.5;
-    margin-bottom: 14px;
-  }
-  .mr-section { margin-bottom: 12px; }
-  .mr-section-tag {
+  .rc-detail-fill { height: 100%; background: #00C362; border-radius: 3px; }
+  .rc-title { font-size: 18px; font-weight: 700; line-height: 1.6; margin-bottom: 16px; }
+  .rc-section { margin-bottom: 14px; }
+  .rc-tag {
     display: inline-block;
-    padding: 2px 6px;
-    border-radius: 2px;
-    font-size: 10px;
-    font-weight: 500;
-    margin-bottom: 4px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 6px;
   }
-  .mr-tag-pro { background: #ECF6FE; color: #2196F3; }
-  .mr-tag-con { background: #FFF0F2; color: #F44336; }
-  .mr-tag-mgmt { background: #F3F3F4; color: #686A6D; }
-  .mr-section-text {
-    font-size: 14px;
-    color: #323438;
-    line-height: 1.6;
-  }
-  .mr-footer {
+  .rc-tag-pro { background: #ECF6FE; color: #2196F3; }
+  .rc-tag-con { background: #FFF0F2; color: #F44336; }
+  .rc-tag-mgmt { background: #F3F3F4; color: #686A6D; }
+  .rc-text { font-size: 14px; color: #323438; line-height: 1.65; }
+  .rc-footer {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-top: 12px;
-    font-size: 12px;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #F3F3F4;
+    font-size: 13px;
     color: #686A6D;
     font-weight: 500;
   }
-  .mr-footer-sep { width: 1px; height: 12px; background: #E5E6E9; }
-  .mr-helpful {
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid #E5E6E9;
-    font-size: 14px;
-    color: #323438;
-    font-weight: 600;
-  }
+  .rc-footer-sep { width: 1px; height: 12px; background: #E5E6E9; }
 
   /* Blur effect */
   .blurred {
-    filter: blur(8px);
+    filter: blur(10px);
     user-select: none;
     pointer-events: none;
-    position: relative;
   }
-  .blurred-overlay {
-    position: relative;
+
+  /* ===== REVIEW/SUMMARY SCREEN ===== */
+  #reviewScreen {
+    padding: 24px;
+    background: #0f0f1a;
+    min-height: 100vh;
   }
-  .blurred-overlay::after {
-    content: '?';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 20px;
-    font-weight: 800;
-    color: rgba(255,107,107,0.8);
-    z-index: 2;
+  .review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .review-header h2 { font-size: 22px; font-weight: 800; }
+  .review-hint { font-size: 14px; color: #555; margin-bottom: 24px; }
+  .review-tier-container { display: flex; flex-direction: column; gap: 4px; margin-bottom: 32px; }
+  .review-tier-row {
+    display: flex;
+    min-height: 56px;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .review-tier-label {
+    width: 160px;
+    min-width: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    text-align: center;
+    color: #000;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 1.3;
+  }
+  .review-tier-label small { font-size: 10px; font-weight: 400; opacity: 0.6; margin-top: 2px; }
+  .review-tier-dropzone {
+    flex: 1;
+    background: rgba(255,255,255,0.03);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 6px;
+    gap: 6px;
+    min-height: 56px;
+    transition: background 0.2s;
+  }
+  .review-tier-dropzone.drag-over { background: rgba(255,255,255,0.08); }
+  .review-chip {
+    padding: 8px 14px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ccc;
+    cursor: grab;
+    user-select: none;
+    transition: all 0.15s;
+  }
+  .review-chip:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+  .review-chip.dragging { opacity: 0.4; }
+  .review-submit-area {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 16px;
   }
 
   /* ===== DONE SCREEN ===== */
@@ -362,354 +371,394 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 40px 20px;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 40px 24px;
+    background: linear-gradient(160deg, #0f0f1a 0%, #1a1a2e 40%, #0f3460 100%);
   }
-  .done-emoji { font-size: 80px; margin-bottom: 20px; }
+  .done-icon { font-size: 72px; margin-bottom: 20px; }
   .done-title { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 12px; }
-  .done-sub { font-size: 16px; color: #aaa; margin-bottom: 32px; }
+  .done-sub { font-size: 16px; color: #777; margin-bottom: 36px; }
   .done-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
-  .done-btn {
-    padding: 12px 32px;
-    border: none;
-    border-radius: 10px;
+  .btn-secondary {
+    padding: 14px 36px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.04);
+    color: #aaa;
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     font-family: 'Pretendard', sans-serif;
     transition: all 0.2s;
   }
-  .done-btn.primary { background: #ff6b6b; color: #fff; }
-  .done-btn.secondary { background: rgba(255,255,255,0.1); color: #ccc; border: 1px solid #444; }
-  .done-btn:hover { transform: translateY(-2px); }
+  .btn-secondary:hover { background: rgba(255,255,255,0.08); color: #ddd; }
 
   /* ===== RESULTS SCREEN ===== */
   #resultsScreen {
-    padding: 20px;
-    background: #1a1a2e;
+    padding: 24px 32px;
+    background: #0f0f1a;
+    min-height: 100vh;
   }
   .results-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 8px;
   }
   .results-header h2 { font-size: 24px; font-weight: 800; }
+  .results-sub { font-size: 14px; color: #555; margin-bottom: 28px; }
   .results-tabs {
-    display: flex;
+    display: inline-flex;
     gap: 4px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 8px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
     padding: 4px;
-    margin-bottom: 24px;
+    margin-bottom: 28px;
   }
   .results-tab {
-    padding: 8px 20px;
+    padding: 10px 24px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     background: transparent;
-    color: #888;
+    color: #666;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     font-family: 'Pretendard', sans-serif;
     transition: all 0.2s;
   }
-  .results-tab.active { background: rgba(255,255,255,0.1); color: #fff; }
+  .results-tab.active { background: rgba(255,255,255,0.08); color: #fff; }
 
-  /* Aggregate Results */
-  .agg-section { margin-bottom: 32px; }
-  .agg-title {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 16px;
-    color: #ccc;
+  /* Dashboard */
+  .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .dash-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 24px;
   }
-  .agg-rank-list { display: flex; flex-direction: column; gap: 8px; }
-  .agg-rank-item {
+  .dash-card.full { grid-column: 1 / -1; }
+  .dash-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #aaa;
+    margin-bottom: 20px;
+  }
+
+  /* Hero card */
+  .hero-stat {
+    text-align: center;
+    padding: 12px 0;
+  }
+  .hero-rank-label { font-size: 13px; color: #666; margin-bottom: 8px; }
+  .hero-case-name { font-size: 28px; font-weight: 800; color: #ff6b6b; margin-bottom: 8px; }
+  .hero-avg { font-size: 40px; font-weight: 800; color: #fff; }
+  .hero-avg small { font-size: 16px; color: #666; font-weight: 500; }
+  .hero-participants { font-size: 14px; color: #555; margin-top: 8px; }
+
+  /* Ranking list */
+  .rank-list { display: flex; flex-direction: column; gap: 8px; }
+  .rank-item {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 16px;
-    background: rgba(255,255,255,0.04);
-    border-radius: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
   }
-  .agg-rank-num {
-    width: 32px;
-    height: 32px;
+  .rank-item:last-child { border-bottom: none; }
+  .rank-num {
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    font-size: 14px;
+    font-size: 13px;
     color: #000;
     flex-shrink: 0;
   }
-  .agg-rank-name { flex: 1; font-size: 15px; font-weight: 600; }
-  .agg-rank-score { font-size: 14px; color: #aaa; font-weight: 500; }
-  .agg-rank-bar {
-    width: 120px;
+  .rank-name { flex: 1; font-size: 14px; font-weight: 600; }
+  .rank-score-num { font-size: 14px; color: #888; font-weight: 600; min-width: 40px; text-align: right; }
+  .rank-bar {
+    width: 100px;
     height: 8px;
-    background: #2d2d44;
+    background: rgba(255,255,255,0.06);
     border-radius: 4px;
     overflow: hidden;
   }
-  .agg-rank-bar-fill { height: 100%; border-radius: 4px; }
+  .rank-bar-fill { height: 100%; border-radius: 4px; }
 
   /* Heatmap */
-  .heatmap-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .heatmap-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .heatmap-label {
+  .heat-grid { display: flex; flex-direction: column; gap: 8px; }
+  .heat-row { display: flex; align-items: center; gap: 10px; }
+  .heat-label {
     width: 140px;
     font-size: 12px;
-    color: #aaa;
+    color: #888;
     text-align: right;
     flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  .heatmap-bar {
+  .heat-bar {
     flex: 1;
-    height: 24px;
+    height: 28px;
     display: flex;
-    border-radius: 4px;
+    border-radius: 6px;
     overflow: hidden;
   }
-  .heatmap-seg {
+  .heat-seg {
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 10px;
-    font-weight: 600;
+    font-weight: 700;
     color: #000;
-    min-width: 0;
-    overflow: hidden;
+    transition: width 0.4s;
   }
+  .heat-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 12px;
+    justify-content: center;
+  }
+  .heat-legend-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: #666; }
+  .heat-legend-dot { width: 10px; height: 10px; border-radius: 3px; }
 
-  /* Participants List */
-  .participant-list { display: flex; flex-direction: column; gap: 8px; }
+  /* Participants */
+  .participant-list { display: flex; flex-direction: column; gap: 6px; }
   .participant-item {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     padding: 14px 16px;
-    background: rgba(255,255,255,0.04);
-    border-radius: 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 12px;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.15s;
   }
-  .participant-item:hover { background: rgba(255,255,255,0.08); }
+  .participant-item:hover { background: rgba(255,255,255,0.06); }
   .participant-avatar {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: #ff6b6b;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 16px;
     color: #fff;
     flex-shrink: 0;
   }
   .participant-info { flex: 1; }
-  .participant-name { font-size: 14px; font-weight: 600; }
-  .participant-time { font-size: 12px; color: #666; margin-top: 2px; }
+  .participant-name { font-size: 15px; font-weight: 600; }
+  .participant-time { font-size: 12px; color: #555; margin-top: 2px; }
+  .participant-arrow { color: #444; font-size: 16px; }
   .participant-delete {
-    padding: 4px 10px;
-    border: 1px solid #444;
+    padding: 5px 12px;
+    border: 1px solid rgba(255,255,255,0.08);
     border-radius: 6px;
     background: transparent;
-    color: #888;
+    color: #666;
     font-size: 12px;
     cursor: pointer;
     font-family: 'Pretendard', sans-serif;
+    transition: all 0.15s;
   }
   .participant-delete:hover { border-color: #ff6b6b; color: #ff6b6b; }
 
-  /* Detail Modal */
+  /* Modal */
   .modal-overlay {
     display: none;
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    inset: 0;
     background: rgba(0,0,0,0.7);
     z-index: 100;
     justify-content: center;
     align-items: center;
     padding: 20px;
+    backdrop-filter: blur(4px);
   }
   .modal-overlay.open { display: flex; }
   .modal-content {
-    background: #1e1e36;
-    border-radius: 16px;
-    padding: 24px;
-    max-width: 700px;
+    background: #1a1a2e;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 28px;
+    max-width: 640px;
     width: 100%;
-    max-height: 80vh;
+    max-height: 85vh;
     overflow-y: auto;
   }
   .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
   }
   .modal-header h3 { font-size: 18px; font-weight: 700; }
   .modal-close {
-    width: 32px; height: 32px;
+    width: 36px;
+    height: 36px;
     border: none;
-    border-radius: 8px;
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    font-size: 18px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.06);
+    color: #888;
+    font-size: 20px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
   }
+  .modal-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
   .modal-tier-list { display: flex; flex-direction: column; gap: 6px; }
   .modal-tier-row {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 8px 12px;
-    border-radius: 8px;
+    padding: 10px 14px;
+    border-radius: 10px;
     background: rgba(255,255,255,0.03);
   }
   .modal-tier-label {
-    width: 120px;
-    min-width: 120px;
+    width: 130px;
+    min-width: 130px;
     font-weight: 700;
     font-size: 12px;
     text-align: center;
     padding: 6px 8px;
-    border-radius: 4px;
+    border-radius: 6px;
     color: #000;
     line-height: 1.3;
   }
-  .modal-tier-items {
-    flex: 1;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .modal-tier-item {
-    padding: 4px 10px;
-    background: rgba(255,255,255,0.08);
+  .modal-tier-items { flex: 1; display: flex; flex-wrap: wrap; gap: 6px; }
+  .modal-tier-chip {
+    padding: 5px 12px;
+    background: rgba(255,255,255,0.06);
     border-radius: 6px;
     font-size: 12px;
-    color: #ccc;
+    color: #bbb;
   }
-  .no-data {
-    text-align: center;
-    padding: 60px 20px;
-    color: #555;
-    font-size: 15px;
-  }
+  .no-data { text-align: center; padding: 60px 20px; color: #444; font-size: 15px; }
 
   /* Confetti */
-  .confetti-piece {
-    position: fixed;
-    width: 10px;
-    height: 10px;
-    z-index: 200;
-    pointer-events: none;
-  }
-
-  /* Touch drag ghost */
-  .touch-ghost {
-    position: fixed;
-    z-index: 999;
-    pointer-events: none;
-    opacity: 0.85;
-    transform: scale(0.9);
-    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
-  }
+  .confetti-piece { position: fixed; z-index: 200; pointer-events: none; }
 
   /* Responsive */
-  @media (max-width: 768px) {
-    .tier-label { width: 90px; min-width: 90px; font-size: 11px; }
-    .tier-label small { font-size: 8px; display: none; }
-    .case-card { width: 100px; }
-    .case-card-preview { width: 100px; height: 130px; }
-    .mini-review { transform: scale(0.238); }
-    .case-card-label { font-size: 9px; padding: 4px 6px; }
-    .start-title { font-size: 28px; }
-    .agg-rank-bar { width: 80px; }
-    .heatmap-label { width: 100px; font-size: 10px; }
+  @media (max-width: 860px) {
+    .sort-body { flex-direction: column; }
+    .sort-card-area { padding: 20px 16px; }
+    .sort-card-wrapper { width: 100%; }
+    .sort-tier-area {
+      width: 100%;
+      flex-direction: row;
+      flex-wrap: wrap;
+      padding: 12px 16px;
+      gap: 6px;
+      justify-content: center;
+    }
+    .sort-tier-label { display: none; }
+    .tier-btn { padding: 10px 12px; flex: 1; min-width: calc(50% - 6px); }
+    .tier-btn-color { width: 6px; height: 28px; }
+    .tier-btn-main { font-size: 12px; }
+    .tier-btn-sub { font-size: 10px; }
+    .dash-grid { grid-template-columns: 1fr; }
+    .review-tier-label { width: 100px; min-width: 100px; font-size: 11px; }
+    .review-tier-label small { display: none; }
+    #resultsScreen { padding: 16px; }
+    .heat-label { width: 90px; font-size: 10px; }
   }
 </style>
 </head>
 <body>
 
-<!-- ===== START SCREEN ===== -->
+<!-- ===== START ===== -->
 <div id="startScreen" class="screen active">
-  <div class="start-nav">
-    <button class="nav-btn" onclick="showScreen('resultsScreen'); renderResults();">참여 기록</button>
-  </div>
-  <div class="start-logo">&#x1F525;</div>
-  <div class="start-title">기업리뷰 킹받음 티어표</div>
+  <div class="start-title">기업 리뷰<br>킹받음 티어표</div>
   <div class="start-subtitle">
     기업 리뷰를 읽는데, 딱 하나의 정보가 가려져 있다면?<br>
     어떤 정보가 안 보일 때 제일 킹받는지 배치해보세요.
   </div>
   <input class="start-input" id="nameInput" type="text" placeholder="닉네임을 입력해주세요" maxlength="20">
-  <br>
-  <button class="start-btn" id="startBtn" onclick="startGame()" disabled>배치하러 가기</button>
-</div>
-
-<!-- ===== TIER SCREEN ===== -->
-<div id="tierScreen" class="screen">
-  <div class="tier-header">
-    <h2>이 정보가 안 보이면 얼마나 킹받나요?</h2>
-    <div class="progress"><span id="placedCount">0</span> / <span id="totalCount">10</span></div>
-    <button class="tier-submit-btn" id="submitBtn" onclick="submitTier()">제출하기</button>
+  <div class="start-actions">
+    <button class="btn-primary" id="startBtn" onclick="startGame()" disabled>배치하러 가기</button>
   </div>
-  <div class="tier-container" id="tierContainer"></div>
-  <div class="pool-section">
-    <div class="pool-title">각 카드를 드래그해서 킹받는 정도에 맞는 칸에 놓아주세요</div>
-    <div class="pool-grid" id="poolGrid"></div>
+  <div class="start-divider"></div>
+  <div class="start-bottom-btns">
+    <button class="btn-ghost" onclick="showScreen('resultsScreen'); renderResults();">종합 결과 보기</button>
+    <button class="btn-ghost" onclick="showScreen('resultsScreen'); switchResultTab('participants', document.querySelector('[data-tab=participants]')); renderResults();">참여 기록</button>
   </div>
 </div>
 
-<!-- ===== DONE SCREEN ===== -->
+<!-- ===== SORT (one at a time) ===== -->
+<div id="sortScreen" class="screen">
+  <div class="sort-header">
+    <div class="sort-progress-wrap">
+      <div class="sort-progress-bar"><div class="sort-progress-fill" id="sortProgressFill"></div></div>
+      <div class="sort-progress-text"><span id="sortCurrent">1</span> / <span id="sortTotal">10</span></div>
+    </div>
+    <button class="sort-back-btn" onclick="goBackCard()">&#8592; 이전</button>
+  </div>
+  <div class="sort-body">
+    <div class="sort-card-area">
+      <div class="sort-card-hint" id="sortHint"></div>
+      <div class="sort-card-wrapper" id="sortCardWrapper"></div>
+      <div class="sort-card-counter" id="sortCounter"></div>
+    </div>
+    <div class="sort-tier-area">
+      <div class="sort-tier-label">이 정보가 안 보이면?</div>
+      <div id="tierBtns"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== REVIEW (summary before submit) ===== -->
+<div id="reviewScreen" class="screen">
+  <div class="review-header">
+    <h2>배치 확인</h2>
+  </div>
+  <div class="review-hint">마음에 안 드는 배치가 있다면 드래그해서 옮겨주세요</div>
+  <div class="review-tier-container" id="reviewTierContainer"></div>
+  <div class="review-submit-area">
+    <button class="btn-ghost" onclick="restartSort()">다시 하기</button>
+    <button class="btn-primary" onclick="submitFinal()">제출하기</button>
+  </div>
+</div>
+
+<!-- ===== DONE ===== -->
 <div id="doneScreen" class="screen">
-  <div class="done-emoji">&#x1F389;</div>
+  <div class="done-icon">&#x1F389;</div>
   <div class="done-title">배치 완료!</div>
-  <div class="done-sub" id="doneSub">참여해주셔서 감사합니다</div>
+  <div class="done-sub" id="doneSub"></div>
   <div class="done-btns">
-    <button class="done-btn primary" onclick="showScreen('resultsScreen'); renderResults();">다른 사람들은 어떻게 했을까?</button>
-    <button class="done-btn secondary" onclick="showScreen('startScreen');">처음으로</button>
+    <button class="btn-primary" onclick="showScreen('resultsScreen'); renderResults();">다른 사람들은 어떻게 했을까?</button>
+    <button class="btn-secondary" onclick="showScreen('startScreen');">처음으로</button>
   </div>
 </div>
 
-<!-- ===== RESULTS SCREEN ===== -->
+<!-- ===== RESULTS ===== -->
 <div id="resultsScreen" class="screen">
   <div class="results-header">
-    <h2>&#x1F4CA; 결과</h2>
-    <button class="nav-btn" onclick="showScreen('startScreen');">돌아가기</button>
+    <h2>종합 결과</h2>
+    <button class="btn-ghost" onclick="showScreen('startScreen');">돌아가기</button>
   </div>
+  <div class="results-sub" id="resultsSub"></div>
   <div class="results-tabs">
-    <button class="results-tab active" data-tab="dashboard" onclick="switchResultTab('dashboard', this)">종합 결과</button>
+    <button class="results-tab active" data-tab="dashboard" onclick="switchResultTab('dashboard', this)">대시보드</button>
     <button class="results-tab" data-tab="participants" onclick="switchResultTab('participants', this)">참여 기록</button>
   </div>
   <div id="dashboardTab"></div>
   <div id="participantsTab" style="display:none;"></div>
 </div>
 
-<!-- ===== DETAIL MODAL ===== -->
+<!-- ===== MODAL ===== -->
 <div class="modal-overlay" id="detailModal">
   <div class="modal-content">
     <div class="modal-header">
-      <h3 id="modalTitle">참여 상세</h3>
+      <h3 id="modalTitle"></h3>
       <button class="modal-close" onclick="closeModal()">&times;</button>
     </div>
     <div id="modalBody"></div>
@@ -717,7 +766,7 @@
 </div>
 
 <script>
-// ===== DATA =====
+// ===== CONFIG =====
 const TIERS = [
   { id: 'S', label: '이거 없으면 못 봄', sub: '리뷰 자체가 무의미', color: '#FF7F7F' },
   { id: 'A', label: '상당히 킹받음', sub: '꽤 답답함', color: '#FFBF7F' },
@@ -728,27 +777,22 @@ const TIERS = [
 ];
 
 const CASES = [
-  { id: 'company', label: '기업명 가림', blurFields: ['company'] },
-  { id: 'job', label: '직무 가림', blurFields: ['job'] },
-  { id: 'status', label: '고용상태 가림', blurFields: ['status'] },
-  { id: 'score', label: '총점수+별점 가림', blurFields: ['score', 'stars'] },
-  { id: 'detail', label: '세부점수 가림', blurFields: ['detailScores'] },
-  { id: 'title', label: '제목 가림', blurFields: ['title'] },
-  { id: 'pros', label: '장점 가림', blurFields: ['pros'] },
-  { id: 'cons', label: '단점 가림', blurFields: ['cons'] },
-  { id: 'mgmt', label: '경영진에 바라는 점 가림', blurFields: ['mgmt'] },
-  { id: 'all', label: '모든 정보 가림', blurFields: ['all'] },
+  { id: 'company', label: '기업명', hint: '어느 회사인지 가려져 있어요', blurFields: ['company'] },
+  { id: 'job', label: '직무', hint: '어떤 직무인지 가려져 있어요', blurFields: ['job'] },
+  { id: 'status', label: '고용상태', hint: '현직원/전직원 여부가 가려져 있어요', blurFields: ['status'] },
+  { id: 'score', label: '총점수+별점', hint: '총 평점과 별점이 가려져 있어요', blurFields: ['score', 'stars'] },
+  { id: 'detail', label: '세부점수', hint: '항목별 세부 점수가 가려져 있어요', blurFields: ['detailScores'] },
+  { id: 'title', label: '한줄 요약', hint: '리뷰 제목(한줄 요약)이 가려져 있어요', blurFields: ['title'] },
+  { id: 'pros', label: '장점', hint: '장점 내용이 가려져 있어요', blurFields: ['pros'] },
+  { id: 'cons', label: '단점', hint: '단점 내용이 가려져 있어요', blurFields: ['cons'] },
+  { id: 'mgmt', label: '경영진에 바라는 점', hint: '경영진에 바라는 점이 가려져 있어요', blurFields: ['mgmt'] },
+  { id: 'all', label: '모든 정보', hint: '모든 정보가 가려져 있어요', blurFields: ['all'] },
 ];
 
-const REVIEW_DATA = {
-  company: '(주)당근마켓',
-  badge: '전직장',
-  job: '백엔드',
-  status: '현직원',
-  location: '서울',
-  date: '2026. 03 작성',
-  score: '5.0',
-  starsFilled: 5,
+const REVIEW = {
+  company: '(주)당근마켓', badge: '전직장',
+  job: '백엔드', status: '현직원', location: '서울', date: '2026. 03 작성',
+  score: '5.0', starsFilled: 5,
   details: [
     { label: '승진 기회', pct: 90 },
     { label: '복지/급여', pct: 95 },
@@ -769,315 +813,198 @@ const STORAGE_KEY = 'tier_maker_results';
 
 // ===== STATE =====
 let currentName = '';
-let placements = {}; // caseId -> tierId
+let sortOrder = [];
+let sortIndex = 0;
+let placements = {};
 
-// ===== SCREEN NAV =====
+// ===== NAV =====
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
-// ===== NAME INPUT =====
+// ===== START =====
 const nameInput = document.getElementById('nameInput');
 const startBtn = document.getElementById('startBtn');
-nameInput.addEventListener('input', () => {
-  startBtn.disabled = !nameInput.value.trim();
-});
-nameInput.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && nameInput.value.trim()) startGame();
-});
+nameInput.addEventListener('input', () => { startBtn.disabled = !nameInput.value.trim(); });
+nameInput.addEventListener('keydown', e => { if (e.key === 'Enter' && nameInput.value.trim()) startGame(); });
 
-// ===== START GAME =====
 function startGame() {
   currentName = nameInput.value.trim();
   if (!currentName) return;
   placements = {};
-  buildTierScreen();
-  showScreen('tierScreen');
+  sortOrder = [...CASES].sort(() => Math.random() - 0.5);
+  sortIndex = 0;
+  buildTierBtns();
+  showSortCard();
+  showScreen('sortScreen');
 }
 
-// ===== BUILD MINI REVIEW CARD HTML =====
-function buildMiniReview(blurFields) {
+// ===== SORT SCREEN =====
+function buildTierBtns() {
+  const wrap = document.getElementById('tierBtns');
+  wrap.innerHTML = '';
+  TIERS.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'tier-btn';
+    btn.innerHTML = `
+      <div class="tier-btn-color" style="background:${t.color}"></div>
+      <div class="tier-btn-text">
+        <div class="tier-btn-main">${t.label}</div>
+        <div class="tier-btn-sub">${t.sub}</div>
+      </div>
+    `;
+    btn.onclick = () => selectTier(t.id);
+    wrap.appendChild(btn);
+  });
+}
+
+function showSortCard() {
+  if (sortIndex >= sortOrder.length) {
+    showReviewScreen();
+    return;
+  }
+  const c = sortOrder[sortIndex];
+  document.getElementById('sortHint').textContent = c.hint;
+  document.getElementById('sortCurrent').textContent = sortIndex + 1;
+  document.getElementById('sortTotal').textContent = sortOrder.length;
+  document.getElementById('sortProgressFill').style.width = ((sortIndex) / sortOrder.length * 100) + '%';
+  document.getElementById('sortCounter').textContent = `${sortIndex + 1}번째 카드`;
+
+  const wrapper = document.getElementById('sortCardWrapper');
+  wrapper.className = 'sort-card-wrapper enter';
+  wrapper.innerHTML = buildReviewCard(c.blurFields);
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => { wrapper.className = 'sort-card-wrapper'; });
+  });
+}
+
+function selectTier(tierId) {
+  const c = sortOrder[sortIndex];
+  placements[c.id] = tierId;
+
+  const wrapper = document.getElementById('sortCardWrapper');
+  wrapper.classList.add('exit-left');
+  setTimeout(() => {
+    sortIndex++;
+    showSortCard();
+  }, 280);
+}
+
+function goBackCard() {
+  if (sortIndex <= 0) return;
+  sortIndex--;
+  const c = sortOrder[sortIndex];
+  delete placements[c.id];
+
+  const wrapper = document.getElementById('sortCardWrapper');
+  wrapper.classList.add('exit-right');
+  setTimeout(() => showSortCard(), 280);
+}
+
+function restartSort() {
+  placements = {};
+  sortOrder = [...CASES].sort(() => Math.random() - 0.5);
+  sortIndex = 0;
+  showSortCard();
+  showScreen('sortScreen');
+}
+
+// ===== BUILD REVIEW CARD HTML =====
+function buildReviewCard(blurFields) {
   const isAll = blurFields.includes('all');
-  const b = (field) => (isAll || blurFields.includes(field)) ? 'blurred' : '';
-  const d = REVIEW_DATA;
+  const b = (f) => (isAll || blurFields.includes(f)) ? 'blurred' : '';
+  const d = REVIEW;
+  const stars = Array.from({length:5},(_,i)=>`<span class="${i<d.starsFilled?'rc-star-filled':'rc-star-empty'}">&#9733;</span>`).join('');
+  const details = d.details.map(dt=>`<div class="rc-detail-item"><div class="rc-detail-label">${dt.label}</div><div class="rc-detail-bar"><div class="rc-detail-fill" style="width:${dt.pct}%"></div></div></div>`).join('');
 
-  const starsHtml = Array.from({length: 5}, (_, i) =>
-    `<span class="mr-star ${i < d.starsFilled ? 'filled' : 'empty'}">${i < d.starsFilled ? '★' : '★'}</span>`
-  ).join('');
-
-  const detailsHtml = d.details.map(dt => `
-    <div class="mr-detail-item">
-      <div class="mr-detail-label">${dt.label}</div>
-      <div class="mr-detail-bar"><div class="mr-detail-fill" style="width:${dt.pct}%"></div></div>
+  return `<div class="review-card">
+    <div class="rc-top">
+      <span class="rc-company ${b('company')}">${d.company}</span>
+      <span class="rc-badge ${b('status')}">${d.badge}</span>
     </div>
-  `).join('');
-
-  return `
-    <div class="mini-review">
-      <div class="mr-top">
-        <span class="mr-company ${b('company')}">${d.company}</span>
-        <span class="mr-badge ${b('status')}">${d.badge}</span>
+    <div class="rc-meta">
+      <span class="${b('job')}">${d.job}</span><span class="rc-meta-sep"></span>
+      <span class="${b('status')}">${d.status}</span><span class="rc-meta-sep"></span>
+      <span>${d.location}</span><span class="rc-meta-sep"></span>
+      <span>${d.date}</span>
+    </div>
+    <div class="rc-body">
+      <div class="rc-left">
+        <div class="rc-score ${b('score')}">${d.score}</div>
+        <div class="rc-stars ${b('stars')}">${stars}</div>
+        <div class="${b('detailScores')}">${details}</div>
       </div>
-      <div class="mr-meta">
-        <span class="${b('job')}">${d.job}</span>
-        <span class="mr-meta-sep"></span>
-        <span class="${b('status')}">${d.status}</span>
-        <span class="mr-meta-sep"></span>
-        <span>${d.location}</span>
-        <span class="mr-meta-sep"></span>
-        <span>${d.date}</span>
-      </div>
-      <div class="mr-body">
-        <div class="mr-left">
-          <div class="mr-score ${b('score')}">${d.score}</div>
-          <div class="mr-stars ${b('stars')}">${starsHtml}</div>
-          <div class="${b('detailScores')}">${detailsHtml}</div>
-        </div>
-        <div class="mr-right">
-          <div class="mr-title ${b('title')}">${d.title.replace(/\n/g, '<br>')}</div>
-          <div class="mr-section ${b('pros')}">
-            <span class="mr-section-tag mr-tag-pro">장점</span>
-            <div class="mr-section-text">${d.pros}</div>
-          </div>
-          <div class="mr-section ${b('cons')}">
-            <span class="mr-section-tag mr-tag-con">단점</span>
-            <div class="mr-section-text">${d.cons}</div>
-          </div>
-          <div class="mr-section ${b('mgmt')}">
-            <span class="mr-section-tag mr-tag-mgmt">경영진에 바라는 점</span>
-            <div class="mr-section-text">${d.mgmt}</div>
-          </div>
-          <div class="mr-footer">
-            <span>— ${d.growth}</span>
-            <span class="mr-footer-sep"></span>
-            <span>&#x1F44D; ${d.recommend}</span>
-          </div>
-          <div class="mr-helpful">${d.helpful} &#x1F44D;</div>
+      <div class="rc-right">
+        <div class="rc-title ${b('title')}">${d.title.replace(/\n/g,'<br>')}</div>
+        <div class="rc-section ${b('pros')}"><span class="rc-tag rc-tag-pro">장점</span><div class="rc-text">${d.pros}</div></div>
+        <div class="rc-section ${b('cons')}"><span class="rc-tag rc-tag-con">단점</span><div class="rc-text">${d.cons}</div></div>
+        <div class="rc-section ${b('mgmt')}"><span class="rc-tag rc-tag-mgmt">경영진에 바라는 점</span><div class="rc-text">${d.mgmt}</div></div>
+        <div class="rc-footer">
+          <span>&#8212; ${d.growth}</span><span class="rc-footer-sep"></span><span>&#x1F44D; ${d.recommend}</span>
         </div>
       </div>
     </div>
-  `;
+  </div>`;
 }
 
-function buildCaseCard(c) {
-  const el = document.createElement('div');
-  el.className = 'case-card';
-  el.dataset.caseId = c.id;
-  el.draggable = true;
-  el.innerHTML = `
-    <div class="case-card-preview">${buildMiniReview(c.blurFields)}</div>
-    <div class="case-card-label">${c.label}</div>
-  `;
-  // Desktop drag
-  el.addEventListener('dragstart', onDragStart);
-  el.addEventListener('dragend', onDragEnd);
-  // Touch drag
-  el.addEventListener('touchstart', onTouchStart, { passive: false });
-  el.addEventListener('touchmove', onTouchMove, { passive: false });
-  el.addEventListener('touchend', onTouchEnd);
-  return el;
-}
-
-// ===== BUILD TIER SCREEN =====
-function buildTierScreen() {
-  const container = document.getElementById('tierContainer');
+// ===== REVIEW SCREEN (drag to rearrange) =====
+function showReviewScreen() {
+  showScreen('reviewScreen');
+  const container = document.getElementById('reviewTierContainer');
   container.innerHTML = '';
+
   TIERS.forEach(t => {
     const row = document.createElement('div');
-    row.className = 'tier-row';
+    row.className = 'review-tier-row';
     row.innerHTML = `
-      <div class="tier-label" style="background:${t.color}">
-        <span>${t.label}</span>
+      <div class="review-tier-label" style="background:${t.color}">
+        ${t.label}
         <small>${t.sub}</small>
       </div>
-      <div class="tier-dropzone" data-tier="${t.id}"></div>
+      <div class="review-tier-dropzone" data-tier="${t.id}"></div>
     `;
     container.appendChild(row);
+
+    const dz = row.querySelector('.review-tier-dropzone');
+    dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+    dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+    dz.addEventListener('drop', e => {
+      e.preventDefault();
+      dz.classList.remove('drag-over');
+      const caseId = e.dataTransfer.getData('text/plain');
+      const chip = document.querySelector(`.review-chip[data-case-id="${caseId}"]`);
+      if (chip) { dz.appendChild(chip); placements[caseId] = t.id; }
+    });
   });
 
-  const pool = document.getElementById('poolGrid');
-  pool.innerHTML = '';
-  // Shuffle cases
-  const shuffled = [...CASES].sort(() => Math.random() - 0.5);
-  shuffled.forEach(c => pool.appendChild(buildCaseCard(c)));
-
-  // Add drop listeners
-  document.querySelectorAll('.tier-dropzone').forEach(dz => {
-    dz.addEventListener('dragover', onDragOver);
-    dz.addEventListener('dragleave', onDragLeave);
-    dz.addEventListener('drop', onDrop);
+  Object.entries(placements).forEach(([caseId, tierId]) => {
+    const c = CASES.find(x => x.id === caseId);
+    const dz = container.querySelector(`.review-tier-dropzone[data-tier="${tierId}"]`);
+    if (!c || !dz) return;
+    const chip = document.createElement('div');
+    chip.className = 'review-chip';
+    chip.dataset.caseId = caseId;
+    chip.draggable = true;
+    chip.textContent = c.label;
+    chip.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', caseId); chip.classList.add('dragging'); });
+    chip.addEventListener('dragend', () => chip.classList.remove('dragging'));
+    dz.appendChild(chip);
   });
-  pool.addEventListener('dragover', onDragOver);
-  pool.addEventListener('dragleave', onDragLeave);
-  pool.addEventListener('drop', onDropPool);
-
-  updateProgress();
-}
-
-// ===== DRAG & DROP (Desktop) =====
-let draggedCaseId = null;
-
-function onDragStart(e) {
-  draggedCaseId = this.dataset.caseId;
-  this.classList.add('dragging');
-  e.dataTransfer.effectAllowed = 'move';
-  e.dataTransfer.setData('text/plain', draggedCaseId);
-}
-
-function onDragEnd(e) {
-  this.classList.remove('dragging');
-  document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
-}
-
-function onDragOver(e) {
-  e.preventDefault();
-  e.dataTransfer.dropEffect = 'move';
-  this.classList.add('drag-over');
-}
-
-function onDragLeave(e) {
-  this.classList.remove('drag-over');
-}
-
-function onDrop(e) {
-  e.preventDefault();
-  this.classList.remove('drag-over');
-  const caseId = e.dataTransfer.getData('text/plain');
-  const tierId = this.dataset.tier;
-  moveCardToTier(caseId, tierId);
-}
-
-function onDropPool(e) {
-  e.preventDefault();
-  this.classList.remove('drag-over');
-  const caseId = e.dataTransfer.getData('text/plain');
-  moveCardToPool(caseId);
-}
-
-function moveCardToTier(caseId, tierId) {
-  const card = document.querySelector(`.case-card[data-case-id="${caseId}"]`);
-  if (!card) return;
-  const dz = document.querySelector(`.tier-dropzone[data-tier="${tierId}"]`);
-  dz.appendChild(card);
-  placements[caseId] = tierId;
-  updateProgress();
-}
-
-function moveCardToPool(caseId) {
-  const card = document.querySelector(`.case-card[data-case-id="${caseId}"]`);
-  if (!card) return;
-  document.getElementById('poolGrid').appendChild(card);
-  delete placements[caseId];
-  updateProgress();
-}
-
-// ===== TOUCH DRAG =====
-let touchGhost = null;
-let touchStartEl = null;
-let touchCaseId = null;
-
-function onTouchStart(e) {
-  const card = e.currentTarget;
-  touchCaseId = card.dataset.caseId;
-  touchStartEl = card;
-
-  const touch = e.touches[0];
-  const rect = card.getBoundingClientRect();
-
-  touchGhost = card.cloneNode(true);
-  touchGhost.className = 'case-card touch-ghost';
-  touchGhost.style.width = rect.width + 'px';
-  touchGhost.style.left = (touch.clientX - rect.width / 2) + 'px';
-  touchGhost.style.top = (touch.clientY - rect.height / 2) + 'px';
-  document.body.appendChild(touchGhost);
-
-  card.classList.add('dragging');
-  e.preventDefault();
-}
-
-function onTouchMove(e) {
-  if (!touchGhost) return;
-  const touch = e.touches[0];
-  const rect = touchGhost.getBoundingClientRect();
-  touchGhost.style.left = (touch.clientX - rect.width / 2) + 'px';
-  touchGhost.style.top = (touch.clientY - rect.height / 2) + 'px';
-
-  document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
-  const target = document.elementFromPoint(touch.clientX, touch.clientY);
-  if (target) {
-    const dz = target.closest('.tier-dropzone');
-    const pool = target.closest('.pool-grid');
-    if (dz) dz.classList.add('drag-over');
-    if (pool) pool.classList.add('drag-over');
-  }
-  e.preventDefault();
-}
-
-function onTouchEnd(e) {
-  if (!touchGhost) return;
-  const touch = e.changedTouches[0];
-  document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
-
-  const target = document.elementFromPoint(touch.clientX, touch.clientY);
-  if (target) {
-    const dz = target.closest('.tier-dropzone');
-    const pool = target.closest('.pool-grid');
-    if (dz) {
-      moveCardToTier(touchCaseId, dz.dataset.tier);
-    } else if (pool) {
-      moveCardToPool(touchCaseId);
-    }
-  }
-
-  if (touchStartEl) touchStartEl.classList.remove('dragging');
-  touchGhost.remove();
-  touchGhost = null;
-  touchStartEl = null;
-  touchCaseId = null;
-}
-
-// ===== PROGRESS =====
-function updateProgress() {
-  const count = Object.keys(placements).length;
-  document.getElementById('placedCount').textContent = count;
-  const btn = document.getElementById('submitBtn');
-  if (count === CASES.length) {
-    btn.classList.add('ready');
-  } else {
-    btn.classList.remove('ready');
-  }
 }
 
 // ===== SUBMIT =====
-function submitTier() {
-  const count = Object.keys(placements).length;
-  if (count < CASES.length) {
-    alert(`모든 카드를 배치해주세요! (${count}/${CASES.length})`);
-    return;
-  }
-  // Save
+function submitFinal() {
   const results = getResults();
-  results.push({
-    name: currentName,
-    timestamp: Date.now(),
-    placements: { ...placements },
-  });
+  results.push({ name: currentName, timestamp: Date.now(), placements: { ...placements } });
   localStorage.setItem(STORAGE_KEY, JSON.stringify(results));
-
-  // Confetti
   launchConfetti();
-
   document.getElementById('doneSub').textContent = `${currentName}님의 킹받음 티어가 저장되었어요!`;
   showScreen('doneScreen');
 }
 
 // ===== RESULTS =====
-function getResults() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-  } catch { return []; }
-}
+function getResults() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { return []; } }
 
 function switchResultTab(tab, btn) {
   document.querySelectorAll('.results-tab').forEach(t => t.classList.remove('active'));
@@ -1087,196 +1014,139 @@ function switchResultTab(tab, btn) {
 }
 
 function renderResults() {
-  renderDashboard();
-  renderParticipants();
+  const results = getResults();
+  document.getElementById('resultsSub').textContent = results.length > 0
+    ? `${results.length}명이 참여했어요`
+    : '';
+  renderDashboard(results);
+  renderParticipants(results);
 }
 
-function renderDashboard() {
-  const results = getResults();
+function renderDashboard(results) {
   const el = document.getElementById('dashboardTab');
+  if (results.length === 0) { el.innerHTML = '<div class="no-data">아직 참여 기록이 없어요.<br>첫 번째로 참여해보세요!</div>'; return; }
 
-  if (results.length === 0) {
-    el.innerHTML = '<div class="no-data">아직 참여 기록이 없습니다</div>';
-    return;
-  }
+  const scoreMap = { S:6, A:5, B:4, C:3, D:2, E:1 };
+  const scores = {};
+  CASES.forEach(c => { scores[c.id] = { total:0, count:0 }; });
+  results.forEach(r => Object.entries(r.placements).forEach(([cid, tid]) => {
+    if (scores[cid]) { scores[cid].total += scoreMap[tid]||0; scores[cid].count++; }
+  }));
+  const ranked = CASES.map(c => ({ ...c, avg: scores[c.id].count > 0 ? scores[c.id].total / scores[c.id].count : 0 })).sort((a,b) => b.avg - a.avg);
 
-  // Compute average scores (S=6, A=5, B=4, C=3, D=2, E=1)
-  const tierScoreMap = { S: 6, A: 5, B: 4, C: 3, D: 2, E: 1 };
-  const caseScores = {};
-  CASES.forEach(c => { caseScores[c.id] = { total: 0, count: 0 }; });
+  const top = ranked[0];
+  const rankColors = ['#FF7F7F','#FFBF7F','#FFDF7F','#FFFF7F','#BFFF7F','#7FBFFF','#BF7FFF','#FF7FBF','#7FFFFF','#CFCFCF'];
 
-  results.forEach(r => {
-    Object.entries(r.placements).forEach(([caseId, tierId]) => {
-      if (caseScores[caseId]) {
-        caseScores[caseId].total += tierScoreMap[tierId] || 0;
-        caseScores[caseId].count += 1;
-      }
-    });
+  // Hero + Ranking
+  let html = '<div class="dash-grid">';
+
+  // Hero card
+  html += `<div class="dash-card"><div class="dash-card-title">가장 킹받는 정보</div>
+    <div class="hero-stat">
+      <div class="hero-rank-label">1위</div>
+      <div class="hero-case-name">${top.label}</div>
+      <div class="hero-avg">${top.avg.toFixed(1)} <small>/ 6.0</small></div>
+      <div class="hero-participants">${results.length}명 참여</div>
+    </div></div>`;
+
+  // Ranking
+  html += `<div class="dash-card"><div class="dash-card-title">킹받음 순위</div><div class="rank-list">`;
+  ranked.forEach((c,i) => {
+    const pct = (c.avg/6)*100;
+    html += `<div class="rank-item">
+      <div class="rank-num" style="background:${rankColors[i]}">${i+1}</div>
+      <div class="rank-name">${c.label}</div>
+      <div class="rank-score-num">${c.avg.toFixed(1)}</div>
+      <div class="rank-bar"><div class="rank-bar-fill" style="width:${pct}%;background:${rankColors[i]}"></div></div>
+    </div>`;
   });
-
-  const ranked = CASES.map(c => ({
-    ...c,
-    avg: caseScores[c.id].count > 0 ? caseScores[c.id].total / caseScores[c.id].count : 0,
-  })).sort((a, b) => b.avg - a.avg);
-
-  // Rank list
-  const rankColors = ['#FF7F7F', '#FFBF7F', '#FFDF7F', '#FFFF7F', '#BFFF7F', '#7FBFFF', '#BF7FFF', '#FF7FBF', '#7FFFFF', '#CFCFCF'];
-  let rankHtml = `
-    <div class="agg-section">
-      <div class="agg-title">&#x1F3C6; 킹받음 순위 (${results.length}명 참여)</div>
-      <div class="agg-rank-list">
-  `;
-  ranked.forEach((c, i) => {
-    const pct = (c.avg / 6) * 100;
-    rankHtml += `
-      <div class="agg-rank-item">
-        <div class="agg-rank-num" style="background:${rankColors[i]}">${i + 1}</div>
-        <div class="agg-rank-name">${c.label}</div>
-        <div class="agg-rank-score">${c.avg.toFixed(1)}점</div>
-        <div class="agg-rank-bar">
-          <div class="agg-rank-bar-fill" style="width:${pct}%; background:${rankColors[i]}"></div>
-        </div>
-      </div>
-    `;
-  });
-  rankHtml += '</div></div>';
+  html += '</div></div>';
 
   // Heatmap
   const tierCounts = {};
-  CASES.forEach(c => {
-    tierCounts[c.id] = {};
-    TIERS.forEach(t => { tierCounts[c.id][t.id] = 0; });
-  });
-  results.forEach(r => {
-    Object.entries(r.placements).forEach(([caseId, tierId]) => {
-      if (tierCounts[caseId] && tierCounts[caseId][tierId] !== undefined) {
-        tierCounts[caseId][tierId]++;
-      }
-    });
-  });
+  CASES.forEach(c => { tierCounts[c.id] = {}; TIERS.forEach(t => { tierCounts[c.id][t.id] = 0; }); });
+  results.forEach(r => Object.entries(r.placements).forEach(([cid,tid]) => {
+    if (tierCounts[cid] && tierCounts[cid][tid] !== undefined) tierCounts[cid][tid]++;
+  }));
 
-  let heatHtml = '<div class="agg-section"><div class="agg-title">&#x1F4CA; 티어 분포</div><div class="heatmap-grid">';
+  html += `<div class="dash-card full"><div class="dash-card-title">티어 분포</div><div class="heat-grid">`;
   ranked.forEach(c => {
-    heatHtml += `<div class="heatmap-row"><div class="heatmap-label">${c.label}</div><div class="heatmap-bar">`;
+    html += `<div class="heat-row"><div class="heat-label">${c.label}</div><div class="heat-bar">`;
     TIERS.forEach(t => {
       const cnt = tierCounts[c.id][t.id];
-      const pct = results.length > 0 ? (cnt / results.length) * 100 : 0;
-      if (pct > 0) {
-        heatHtml += `<div class="heatmap-seg" style="width:${pct}%;background:${t.color}" title="${t.label}: ${cnt}명">${pct >= 20 ? t.id : ''}</div>`;
-      }
+      const pct = (cnt/results.length)*100;
+      if (pct > 0) html += `<div class="heat-seg" style="width:${pct}%;background:${t.color}" title="${t.label}: ${cnt}명">${pct>=18?t.id:''}</div>`;
     });
-    heatHtml += '</div></div>';
+    html += '</div></div>';
   });
-  heatHtml += '</div></div>';
+  html += '</div>';
+  html += `<div class="heat-legend">${TIERS.map(t=>`<div class="heat-legend-item"><div class="heat-legend-dot" style="background:${t.color}"></div>${t.id}: ${t.label}</div>`).join('')}</div>`;
+  html += '</div>';
 
-  el.innerHTML = rankHtml + heatHtml;
+  html += '</div>';
+  el.innerHTML = html;
 }
 
-function renderParticipants() {
-  const results = getResults();
+function renderParticipants(results) {
   const el = document.getElementById('participantsTab');
-
-  if (results.length === 0) {
-    el.innerHTML = '<div class="no-data">아직 참여 기록이 없습니다</div>';
-    return;
-  }
-
-  const avatarColors = ['#FF6B6B', '#FFA502', '#2ED573', '#1E90FF', '#A855F7', '#FF6348', '#3742FA', '#FF4757'];
-
+  if (results.length === 0) { el.innerHTML = '<div class="no-data">아직 참여 기록이 없어요</div>'; return; }
+  const colors = ['#FF6B6B','#FFA502','#2ED573','#1E90FF','#A855F7','#FF6348','#3742FA','#FF4757'];
   let html = '<div class="participant-list">';
-  results.slice().reverse().forEach((r, i) => {
-    const idx = results.length - 1 - i;
-    const date = new Date(r.timestamp);
-    const dateStr = `${date.getFullYear()}.${String(date.getMonth()+1).padStart(2,'0')}.${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
-    const color = avatarColors[idx % avatarColors.length];
-    html += `
-      <div class="participant-item" onclick="showDetail(${idx})">
-        <div class="participant-avatar" style="background:${color}">${r.name.charAt(0)}</div>
-        <div class="participant-info">
-          <div class="participant-name">${escapeHtml(r.name)}</div>
-          <div class="participant-time">${dateStr}</div>
-        </div>
-        <button class="participant-delete" onclick="event.stopPropagation(); deleteParticipant(${idx})">삭제</button>
-      </div>
-    `;
+  results.slice().reverse().forEach((r,i) => {
+    const idx = results.length-1-i;
+    const d = new Date(r.timestamp);
+    const ds = `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    html += `<div class="participant-item" onclick="showDetail(${idx})">
+      <div class="participant-avatar" style="background:${colors[idx%colors.length]}">${esc(r.name).charAt(0)}</div>
+      <div class="participant-info"><div class="participant-name">${esc(r.name)}</div><div class="participant-time">${ds}</div></div>
+      <button class="participant-delete" onclick="event.stopPropagation();deletePart(${idx})">삭제</button>
+      <div class="participant-arrow">&#8250;</div>
+    </div>`;
   });
   html += '</div>';
   el.innerHTML = html;
 }
 
-function deleteParticipant(idx) {
-  if (!confirm('이 참여 기록을 삭제하시겠습니까?')) return;
-  const results = getResults();
-  results.splice(idx, 1);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(results));
+function deletePart(idx) {
+  if (!confirm('이 참여 기록을 삭제할까요?')) return;
+  const r = getResults(); r.splice(idx,1);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(r));
   renderResults();
 }
 
 function showDetail(idx) {
-  const results = getResults();
-  const r = results[idx];
-  if (!r) return;
-
+  const r = getResults()[idx]; if (!r) return;
   document.getElementById('modalTitle').textContent = `${r.name}님의 배치`;
-
   let html = '<div class="modal-tier-list">';
   TIERS.forEach(t => {
-    const items = Object.entries(r.placements)
-      .filter(([_, tid]) => tid === t.id)
-      .map(([cid]) => CASES.find(c => c.id === cid))
-      .filter(Boolean);
-
-    html += `
-      <div class="modal-tier-row">
-        <div class="modal-tier-label" style="background:${t.color}">${t.label}</div>
-        <div class="modal-tier-items">
-          ${items.length > 0 ? items.map(c => `<div class="modal-tier-item">${c.label}</div>`).join('') : '<span style="color:#555;font-size:12px">-</span>'}
-        </div>
-      </div>
-    `;
+    const items = Object.entries(r.placements).filter(([_,tid])=>tid===t.id).map(([cid])=>CASES.find(c=>c.id===cid)).filter(Boolean);
+    html += `<div class="modal-tier-row">
+      <div class="modal-tier-label" style="background:${t.color}">${t.label}</div>
+      <div class="modal-tier-items">${items.length ? items.map(c=>`<div class="modal-tier-chip">${c.label}</div>`).join('') : '<span style="color:#444;font-size:12px">-</span>'}</div>
+    </div>`;
   });
   html += '</div>';
-
   document.getElementById('modalBody').innerHTML = html;
   document.getElementById('detailModal').classList.add('open');
 }
 
-function closeModal() {
-  document.getElementById('detailModal').classList.remove('open');
-}
-document.getElementById('detailModal').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closeModal();
-});
+function closeModal() { document.getElementById('detailModal').classList.remove('open'); }
+document.getElementById('detailModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
 
 // ===== CONFETTI =====
 function launchConfetti() {
-  const colors = ['#FF7F7F', '#FFBF7F', '#FFDF7F', '#FFFF7F', '#BFFF7F', '#7FBFFF', '#FF6B6B', '#FFA502'];
-  for (let i = 0; i < 50; i++) {
-    const piece = document.createElement('div');
-    piece.className = 'confetti-piece';
-    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-    piece.style.left = Math.random() * 100 + 'vw';
-    piece.style.top = '-10px';
-    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-    piece.style.width = (6 + Math.random() * 8) + 'px';
-    piece.style.height = (6 + Math.random() * 8) + 'px';
-    document.body.appendChild(piece);
-
-    const duration = 1500 + Math.random() * 1500;
-    const xDrift = (Math.random() - 0.5) * 200;
-    piece.animate([
-      { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
-      { transform: `translate(${xDrift}px, ${window.innerHeight + 20}px) rotate(${Math.random()*720}deg)`, opacity: 0 },
-    ], { duration, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' }).onfinish = () => piece.remove();
+  const colors = ['#FF7F7F','#FFBF7F','#FFDF7F','#BFFF7F','#7FBFFF','#FF6B6B','#FFA502'];
+  for (let i=0;i<50;i++) {
+    const p = document.createElement('div');
+    p.className='confetti-piece';
+    p.style.cssText = `background:${colors[i%colors.length]};left:${Math.random()*100}vw;top:-10px;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;border-radius:${Math.random()>.5?'50%':'2px'}`;
+    document.body.appendChild(p);
+    const dur=1500+Math.random()*1500, xd=(Math.random()-.5)*200;
+    p.animate([{transform:'translate(0,0) rotate(0)',opacity:1},{transform:`translate(${xd}px,${innerHeight+20}px) rotate(${Math.random()*720}deg)`,opacity:0}],{duration:dur,easing:'ease-out'}).onfinish=()=>p.remove();
   }
 }
 
-// ===== UTILS =====
-function escapeHtml(str) {
-  const d = document.createElement('div');
-  d.textContent = str;
-  return d.innerHTML;
-}
+function esc(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 </script>
 </body>
 </html>
