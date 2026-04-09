@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기업 리뷰 킹받음 티어표</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== SCREENS ===== */
+  .screen { display: none; min-height: 100vh; }
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* ===== START SCREEN ===== */
+  #startScreen {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  }
+  .start-logo {
+    font-size: 64px;
+    margin-bottom: 16px;
+  }
+  .start-title {
+    font-size: 36px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ff6b6b, #ffa502);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+  }
+  .start-subtitle {
+    font-size: 16px;
+    color: #a0a0b0;
+    margin-bottom: 40px;
+    line-height: 1.6;
+  }
+  .start-input {
+    width: 300px;
+    padding: 14px 20px;
+    border: 2px solid #333;
+    border-radius: 12px;
+    background: #16213e;
+    color: #fff;
+    font-size: 16px;
+    font-family: 'Pretendard', sans-serif;
+    text-align: center;
+    margin-bottom: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .start-input:focus { border-color: #ff6b6b; }
+  .start-input::placeholder { color: #555; }
+  .start-btn {
+    padding: 14px 48px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-family: 'Pretendard', sans-serif;
+  }
+  .start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,107,107,0.3); }
+  .start-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+  .start-nav {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 12px;
+  }
+  .nav-btn {
+    padding: 8px 16px;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.05);
+    color: #aaa;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+  /* ===== TIER SCREEN ===== */
+  #tierScreen {
+    padding: 16px;
+    gap: 16px;
+  }
+  .tier-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+  }
+  .tier-header h2 {
+    font-size: 17px;
+    font-weight: 700;
+  }
+  .tier-header .progress {
+    font-size: 14px;
+    color: #aaa;
+  }
+  .tier-header .progress span { color: #ff6b6b; font-weight: 700; }
+  .tier-submit-btn {
+    padding: 8px 24px;
+    border: none;
+    border-radius: 8px;
+    background: #ff6b6b;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+    transition: all 0.2s;
+    opacity: 0.5;
+  }
+  .tier-submit-btn.ready { opacity: 1; }
+  .tier-submit-btn.ready:hover { background: #ee5a24; transform: translateY(-1px); }
+
+  /* Tier Rows */
+  .tier-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-height: 0;
+  }
+  .tier-row {
+    display: flex;
+    min-height: 110px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .tier-label {
+    width: 140px;
+    min-width: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 10px 8px;
+    text-align: center;
+    color: #000;
+    line-height: 1.4;
+  }
+  .tier-label small {
+    font-size: 10px;
+    font-weight: 500;
+    margin-top: 2px;
+    opacity: 0.6;
+  }
+  .tier-dropzone {
+    flex: 1;
+    background: #2d2d44;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+    padding: 6px;
+    gap: 6px;
+    min-height: 110px;
+    transition: background 0.2s;
+  }
+  .tier-dropzone.drag-over { background: #3d3d5c; }
+
+  /* Pool */
+  .pool-section {
+    background: #16213e;
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .pool-title {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  .pool-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    min-height: 60px;
+  }
+  .pool-grid.drag-over { background: rgba(255,255,255,0.03); border-radius: 8px; }
+
+  /* ===== CASE CARD (draggable thumbnail) ===== */
+  .case-card {
+    width: 140px;
+    cursor: grab;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    transition: transform 0.15s, box-shadow 0.15s;
+    user-select: none;
+    -webkit-user-select: none;
+    flex-shrink: 0;
+  }
+  .case-card:hover { transform: scale(1.05); box-shadow: 0 4px 16px rgba(0,0,0,0.3); z-index: 10; }
+  .case-card.dragging { opacity: 0.4; transform: scale(0.95); }
+  .case-card-preview {
+    width: 140px;
+    height: 180px;
+    overflow: hidden;
+    position: relative;
+  }
+  .case-card-label {
+    padding: 6px 8px;
+    background: #1a1a2e;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ===== MINI REVIEW CARD (inside case-card-preview) ===== */
+  .mini-review {
+    width: 420px;
+    padding: 20px 24px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #E5E6E9;
+    font-family: 'Pretendard', sans-serif;
+    transform: scale(0.333);
+    transform-origin: top left;
+    color: #323438;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .mr-top { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .mr-company { font-size: 20px; font-weight: 700; color: #323438; }
+  .mr-badge {
+    padding: 1px 6px;
+    background: #F3F3F4;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #57595B;
+  }
+  .mr-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 14px;
+    font-size: 14px;
+    color: #85878C;
+  }
+  .mr-meta-sep { width: 1px; height: 12px; background: #E5E6E9; }
+  .mr-body { display: flex; gap: 24px; }
+  .mr-left { width: 150px; flex-shrink: 0; }
+  .mr-right { flex: 1; min-width: 0; }
+  .mr-score { font-size: 24px; font-weight: 700; color: #323438; margin-bottom: 4px; }
+  .mr-stars { display: flex; gap: 2px; margin-bottom: 16px; }
+  .mr-star { width: 16px; height: 16px; }
+  .mr-star.filled { color: #00C362; }
+  .mr-star.empty { color: #E5E6E9; }
+  .mr-detail-item { margin-bottom: 10px; }
+  .mr-detail-label { font-size: 12px; color: #323438; margin-bottom: 4px; }
+  .mr-detail-bar {
+    width: 100px;
+    height: 6px;
+    background: #E5E6E9;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+  }
+  .mr-detail-fill {
+    height: 6px;
+    background: #00C362;
+    border-radius: 2px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .mr-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #323438;
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+  .mr-section { margin-bottom: 12px; }
+  .mr-section-tag {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-size: 10px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .mr-tag-pro { background: #ECF6FE; color: #2196F3; }
+  .mr-tag-con { background: #FFF0F2; color: #F44336; }
+  .mr-tag-mgmt { background: #F3F3F4; color: #686A6D; }
+  .mr-section-text {
+    font-size: 14px;
+    color: #323438;
+    line-height: 1.6;
+  }
+  .mr-footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: #686A6D;
+    font-weight: 500;
+  }
+  .mr-footer-sep { width: 1px; height: 12px; background: #E5E6E9; }
+  .mr-helpful {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #E5E6E9;
+    font-size: 14px;
+    color: #323438;
+    font-weight: 600;
+  }
+
+  /* Blur effect */
+  .blurred {
+    filter: blur(8px);
+    user-select: none;
+    pointer-events: none;
+    position: relative;
+  }
+  .blurred-overlay {
+    position: relative;
+  }
+  .blurred-overlay::after {
+    content: '?';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    font-weight: 800;
+    color: rgba(255,107,107,0.8);
+    z-index: 2;
+  }
+
+  /* ===== DONE SCREEN ===== */
+  #doneScreen {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  }
+  .done-emoji { font-size: 80px; margin-bottom: 20px; }
+  .done-title { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+  .done-sub { font-size: 16px; color: #aaa; margin-bottom: 32px; }
+  .done-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .done-btn {
+    padding: 12px 32px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+    transition: all 0.2s;
+  }
+  .done-btn.primary { background: #ff6b6b; color: #fff; }
+  .done-btn.secondary { background: rgba(255,255,255,0.1); color: #ccc; border: 1px solid #444; }
+  .done-btn:hover { transform: translateY(-2px); }
+
+  /* ===== RESULTS SCREEN ===== */
+  #resultsScreen {
+    padding: 20px;
+    background: #1a1a2e;
+  }
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  .results-header h2 { font-size: 24px; font-weight: 800; }
+  .results-tabs {
+    display: flex;
+    gap: 4px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 4px;
+    margin-bottom: 24px;
+  }
+  .results-tab {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #888;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+    transition: all 0.2s;
+  }
+  .results-tab.active { background: rgba(255,255,255,0.1); color: #fff; }
+
+  /* Aggregate Results */
+  .agg-section { margin-bottom: 32px; }
+  .agg-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #ccc;
+  }
+  .agg-rank-list { display: flex; flex-direction: column; gap: 8px; }
+  .agg-rank-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+  }
+  .agg-rank-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+    color: #000;
+    flex-shrink: 0;
+  }
+  .agg-rank-name { flex: 1; font-size: 15px; font-weight: 600; }
+  .agg-rank-score { font-size: 14px; color: #aaa; font-weight: 500; }
+  .agg-rank-bar {
+    width: 120px;
+    height: 8px;
+    background: #2d2d44;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .agg-rank-bar-fill { height: 100%; border-radius: 4px; }
+
+  /* Heatmap */
+  .heatmap-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .heatmap-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .heatmap-label {
+    width: 140px;
+    font-size: 12px;
+    color: #aaa;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .heatmap-bar {
+    flex: 1;
+    height: 24px;
+    display: flex;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .heatmap-seg {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: #000;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  /* Participants List */
+  .participant-list { display: flex; flex-direction: column; gap: 8px; }
+  .participant-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .participant-item:hover { background: rgba(255,255,255,0.08); }
+  .participant-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #ff6b6b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .participant-info { flex: 1; }
+  .participant-name { font-size: 14px; font-weight: 600; }
+  .participant-time { font-size: 12px; color: #666; margin-top: 2px; }
+  .participant-delete {
+    padding: 4px 10px;
+    border: 1px solid #444;
+    border-radius: 6px;
+    background: transparent;
+    color: #888;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+  }
+  .participant-delete:hover { border-color: #ff6b6b; color: #ff6b6b; }
+
+  /* Detail Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-content {
+    background: #1e1e36;
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .modal-header h3 { font-size: 18px; font-weight: 700; }
+  .modal-close {
+    width: 32px; height: 32px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-tier-list { display: flex; flex-direction: column; gap: 6px; }
+  .modal-tier-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.03);
+  }
+  .modal-tier-label {
+    width: 120px;
+    min-width: 120px;
+    font-weight: 700;
+    font-size: 12px;
+    text-align: center;
+    padding: 6px 8px;
+    border-radius: 4px;
+    color: #000;
+    line-height: 1.3;
+  }
+  .modal-tier-items {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .modal-tier-item {
+    padding: 4px 10px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 6px;
+    font-size: 12px;
+    color: #ccc;
+  }
+  .no-data {
+    text-align: center;
+    padding: 60px 20px;
+    color: #555;
+    font-size: 15px;
+  }
+
+  /* Confetti */
+  .confetti-piece {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    z-index: 200;
+    pointer-events: none;
+  }
+
+  /* Touch drag ghost */
+  .touch-ghost {
+    position: fixed;
+    z-index: 999;
+    pointer-events: none;
+    opacity: 0.85;
+    transform: scale(0.9);
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .tier-label { width: 90px; min-width: 90px; font-size: 11px; }
+    .tier-label small { font-size: 8px; display: none; }
+    .case-card { width: 100px; }
+    .case-card-preview { width: 100px; height: 130px; }
+    .mini-review { transform: scale(0.238); }
+    .case-card-label { font-size: 9px; padding: 4px 6px; }
+    .start-title { font-size: 28px; }
+    .agg-rank-bar { width: 80px; }
+    .heatmap-label { width: 100px; font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== START SCREEN ===== -->
+<div id="startScreen" class="screen active">
+  <div class="start-nav">
+    <button class="nav-btn" onclick="showScreen('resultsScreen'); renderResults();">참여 기록</button>
+  </div>
+  <div class="start-logo">&#x1F525;</div>
+  <div class="start-title">기업리뷰 킹받음 티어표</div>
+  <div class="start-subtitle">
+    기업 리뷰를 읽는데, 딱 하나의 정보가 가려져 있다면?<br>
+    어떤 정보가 안 보일 때 제일 킹받는지 배치해보세요.
+  </div>
+  <input class="start-input" id="nameInput" type="text" placeholder="닉네임을 입력해주세요" maxlength="20">
+  <br>
+  <button class="start-btn" id="startBtn" onclick="startGame()" disabled>배치하러 가기</button>
+</div>
+
+<!-- ===== TIER SCREEN ===== -->
+<div id="tierScreen" class="screen">
+  <div class="tier-header">
+    <h2>이 정보가 안 보이면 얼마나 킹받나요?</h2>
+    <div class="progress"><span id="placedCount">0</span> / <span id="totalCount">10</span></div>
+    <button class="tier-submit-btn" id="submitBtn" onclick="submitTier()">제출하기</button>
+  </div>
+  <div class="tier-container" id="tierContainer"></div>
+  <div class="pool-section">
+    <div class="pool-title">각 카드를 드래그해서 킹받는 정도에 맞는 칸에 놓아주세요</div>
+    <div class="pool-grid" id="poolGrid"></div>
+  </div>
+</div>
+
+<!-- ===== DONE SCREEN ===== -->
+<div id="doneScreen" class="screen">
+  <div class="done-emoji">&#x1F389;</div>
+  <div class="done-title">배치 완료!</div>
+  <div class="done-sub" id="doneSub">참여해주셔서 감사합니다</div>
+  <div class="done-btns">
+    <button class="done-btn primary" onclick="showScreen('resultsScreen'); renderResults();">다른 사람들은 어떻게 했을까?</button>
+    <button class="done-btn secondary" onclick="showScreen('startScreen');">처음으로</button>
+  </div>
+</div>
+
+<!-- ===== RESULTS SCREEN ===== -->
+<div id="resultsScreen" class="screen">
+  <div class="results-header">
+    <h2>&#x1F4CA; 결과</h2>
+    <button class="nav-btn" onclick="showScreen('startScreen');">돌아가기</button>
+  </div>
+  <div class="results-tabs">
+    <button class="results-tab active" data-tab="dashboard" onclick="switchResultTab('dashboard', this)">종합 결과</button>
+    <button class="results-tab" data-tab="participants" onclick="switchResultTab('participants', this)">참여 기록</button>
+  </div>
+  <div id="dashboardTab"></div>
+  <div id="participantsTab" style="display:none;"></div>
+</div>
+
+<!-- ===== DETAIL MODAL ===== -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="modalTitle">참여 상세</h3>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const TIERS = [
+  { id: 'S', label: '이거 없으면 못 봄', sub: '리뷰 자체가 무의미', color: '#FF7F7F' },
+  { id: 'A', label: '상당히 킹받음', sub: '꽤 답답함', color: '#FFBF7F' },
+  { id: 'B', label: '은근 신경 쓰임', sub: '좀 찝찝함', color: '#FFDF7F' },
+  { id: 'C', label: '조금 아쉬움', sub: '없어도 볼 만함', color: '#FFFF7F' },
+  { id: 'D', label: '별로 안 킹받음', sub: '크게 상관없음', color: '#BFFF7F' },
+  { id: 'E', label: '하나도 안 킹받음', sub: '있으나 마나', color: '#7FBFFF' },
+];
+
+const CASES = [
+  { id: 'company', label: '기업명 가림', blurFields: ['company'] },
+  { id: 'job', label: '직무 가림', blurFields: ['job'] },
+  { id: 'status', label: '고용상태 가림', blurFields: ['status'] },
+  { id: 'score', label: '총점수+별점 가림', blurFields: ['score', 'stars'] },
+  { id: 'detail', label: '세부점수 가림', blurFields: ['detailScores'] },
+  { id: 'title', label: '제목 가림', blurFields: ['title'] },
+  { id: 'pros', label: '장점 가림', blurFields: ['pros'] },
+  { id: 'cons', label: '단점 가림', blurFields: ['cons'] },
+  { id: 'mgmt', label: '경영진에 바라는 점 가림', blurFields: ['mgmt'] },
+  { id: 'all', label: '모든 정보 가림', blurFields: ['all'] },
+];
+
+const REVIEW_DATA = {
+  company: '(주)당근마켓',
+  badge: '전직장',
+  job: '백엔드',
+  status: '현직원',
+  location: '서울',
+  date: '2026. 03 작성',
+  score: '5.0',
+  starsFilled: 5,
+  details: [
+    { label: '승진 기회', pct: 90 },
+    { label: '복지/급여', pct: 95 },
+    { label: '워라밸', pct: 95 },
+    { label: '사내문화', pct: 100 },
+    { label: '경영진', pct: 85 },
+  ],
+  title: '워라밸과 사내문화 모두 최상급\n자율 출퇴근에 무제한 휴가까지',
+  pros: '자율과 책임의 밸런스가 완벽. 무제한 휴가를 실제로 자유롭게 사용 가능. 동료들이 서로 존중하는 문화.',
+  cons: '높은 자율성이 주어지는 만큼 셀프 매니지먼트 능력이 필요. 프로세스가 아직 정립 중인 부분이 있음.',
+  mgmt: '업무 유연시간제도 같은것 도입해주었으면 함. 그리고 남자들도 여직원처럼 1년 정도는 육아휴직 제도가있었음 좋겠음.',
+  growth: '1년 후 성장하고 있을 것 같아요',
+  recommend: '기업을 추천해요',
+  helpful: '198명에게 도움이 됐어요',
+};
+
+const STORAGE_KEY = 'tier_maker_results';
+
+// ===== STATE =====
+let currentName = '';
+let placements = {}; // caseId -> tierId
+
+// ===== SCREEN NAV =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ===== NAME INPUT =====
+const nameInput = document.getElementById('nameInput');
+const startBtn = document.getElementById('startBtn');
+nameInput.addEventListener('input', () => {
+  startBtn.disabled = !nameInput.value.trim();
+});
+nameInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && nameInput.value.trim()) startGame();
+});
+
+// ===== START GAME =====
+function startGame() {
+  currentName = nameInput.value.trim();
+  if (!currentName) return;
+  placements = {};
+  buildTierScreen();
+  showScreen('tierScreen');
+}
+
+// ===== BUILD MINI REVIEW CARD HTML =====
+function buildMiniReview(blurFields) {
+  const isAll = blurFields.includes('all');
+  const b = (field) => (isAll || blurFields.includes(field)) ? 'blurred' : '';
+  const d = REVIEW_DATA;
+
+  const starsHtml = Array.from({length: 5}, (_, i) =>
+    `<span class="mr-star ${i < d.starsFilled ? 'filled' : 'empty'}">${i < d.starsFilled ? '★' : '★'}</span>`
+  ).join('');
+
+  const detailsHtml = d.details.map(dt => `
+    <div class="mr-detail-item">
+      <div class="mr-detail-label">${dt.label}</div>
+      <div class="mr-detail-bar"><div class="mr-detail-fill" style="width:${dt.pct}%"></div></div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="mini-review">
+      <div class="mr-top">
+        <span class="mr-company ${b('company')}">${d.company}</span>
+        <span class="mr-badge ${b('status')}">${d.badge}</span>
+      </div>
+      <div class="mr-meta">
+        <span class="${b('job')}">${d.job}</span>
+        <span class="mr-meta-sep"></span>
+        <span class="${b('status')}">${d.status}</span>
+        <span class="mr-meta-sep"></span>
+        <span>${d.location}</span>
+        <span class="mr-meta-sep"></span>
+        <span>${d.date}</span>
+      </div>
+      <div class="mr-body">
+        <div class="mr-left">
+          <div class="mr-score ${b('score')}">${d.score}</div>
+          <div class="mr-stars ${b('stars')}">${starsHtml}</div>
+          <div class="${b('detailScores')}">${detailsHtml}</div>
+        </div>
+        <div class="mr-right">
+          <div class="mr-title ${b('title')}">${d.title.replace(/\n/g, '<br>')}</div>
+          <div class="mr-section ${b('pros')}">
+            <span class="mr-section-tag mr-tag-pro">장점</span>
+            <div class="mr-section-text">${d.pros}</div>
+          </div>
+          <div class="mr-section ${b('cons')}">
+            <span class="mr-section-tag mr-tag-con">단점</span>
+            <div class="mr-section-text">${d.cons}</div>
+          </div>
+          <div class="mr-section ${b('mgmt')}">
+            <span class="mr-section-tag mr-tag-mgmt">경영진에 바라는 점</span>
+            <div class="mr-section-text">${d.mgmt}</div>
+          </div>
+          <div class="mr-footer">
+            <span>— ${d.growth}</span>
+            <span class="mr-footer-sep"></span>
+            <span>&#x1F44D; ${d.recommend}</span>
+          </div>
+          <div class="mr-helpful">${d.helpful} &#x1F44D;</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function buildCaseCard(c) {
+  const el = document.createElement('div');
+  el.className = 'case-card';
+  el.dataset.caseId = c.id;
+  el.draggable = true;
+  el.innerHTML = `
+    <div class="case-card-preview">${buildMiniReview(c.blurFields)}</div>
+    <div class="case-card-label">${c.label}</div>
+  `;
+  // Desktop drag
+  el.addEventListener('dragstart', onDragStart);
+  el.addEventListener('dragend', onDragEnd);
+  // Touch drag
+  el.addEventListener('touchstart', onTouchStart, { passive: false });
+  el.addEventListener('touchmove', onTouchMove, { passive: false });
+  el.addEventListener('touchend', onTouchEnd);
+  return el;
+}
+
+// ===== BUILD TIER SCREEN =====
+function buildTierScreen() {
+  const container = document.getElementById('tierContainer');
+  container.innerHTML = '';
+  TIERS.forEach(t => {
+    const row = document.createElement('div');
+    row.className = 'tier-row';
+    row.innerHTML = `
+      <div class="tier-label" style="background:${t.color}">
+        <span>${t.label}</span>
+        <small>${t.sub}</small>
+      </div>
+      <div class="tier-dropzone" data-tier="${t.id}"></div>
+    `;
+    container.appendChild(row);
+  });
+
+  const pool = document.getElementById('poolGrid');
+  pool.innerHTML = '';
+  // Shuffle cases
+  const shuffled = [...CASES].sort(() => Math.random() - 0.5);
+  shuffled.forEach(c => pool.appendChild(buildCaseCard(c)));
+
+  // Add drop listeners
+  document.querySelectorAll('.tier-dropzone').forEach(dz => {
+    dz.addEventListener('dragover', onDragOver);
+    dz.addEventListener('dragleave', onDragLeave);
+    dz.addEventListener('drop', onDrop);
+  });
+  pool.addEventListener('dragover', onDragOver);
+  pool.addEventListener('dragleave', onDragLeave);
+  pool.addEventListener('drop', onDropPool);
+
+  updateProgress();
+}
+
+// ===== DRAG & DROP (Desktop) =====
+let draggedCaseId = null;
+
+function onDragStart(e) {
+  draggedCaseId = this.dataset.caseId;
+  this.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', draggedCaseId);
+}
+
+function onDragEnd(e) {
+  this.classList.remove('dragging');
+  document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+}
+
+function onDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  this.classList.add('drag-over');
+}
+
+function onDragLeave(e) {
+  this.classList.remove('drag-over');
+}
+
+function onDrop(e) {
+  e.preventDefault();
+  this.classList.remove('drag-over');
+  const caseId = e.dataTransfer.getData('text/plain');
+  const tierId = this.dataset.tier;
+  moveCardToTier(caseId, tierId);
+}
+
+function onDropPool(e) {
+  e.preventDefault();
+  this.classList.remove('drag-over');
+  const caseId = e.dataTransfer.getData('text/plain');
+  moveCardToPool(caseId);
+}
+
+function moveCardToTier(caseId, tierId) {
+  const card = document.querySelector(`.case-card[data-case-id="${caseId}"]`);
+  if (!card) return;
+  const dz = document.querySelector(`.tier-dropzone[data-tier="${tierId}"]`);
+  dz.appendChild(card);
+  placements[caseId] = tierId;
+  updateProgress();
+}
+
+function moveCardToPool(caseId) {
+  const card = document.querySelector(`.case-card[data-case-id="${caseId}"]`);
+  if (!card) return;
+  document.getElementById('poolGrid').appendChild(card);
+  delete placements[caseId];
+  updateProgress();
+}
+
+// ===== TOUCH DRAG =====
+let touchGhost = null;
+let touchStartEl = null;
+let touchCaseId = null;
+
+function onTouchStart(e) {
+  const card = e.currentTarget;
+  touchCaseId = card.dataset.caseId;
+  touchStartEl = card;
+
+  const touch = e.touches[0];
+  const rect = card.getBoundingClientRect();
+
+  touchGhost = card.cloneNode(true);
+  touchGhost.className = 'case-card touch-ghost';
+  touchGhost.style.width = rect.width + 'px';
+  touchGhost.style.left = (touch.clientX - rect.width / 2) + 'px';
+  touchGhost.style.top = (touch.clientY - rect.height / 2) + 'px';
+  document.body.appendChild(touchGhost);
+
+  card.classList.add('dragging');
+  e.preventDefault();
+}
+
+function onTouchMove(e) {
+  if (!touchGhost) return;
+  const touch = e.touches[0];
+  const rect = touchGhost.getBoundingClientRect();
+  touchGhost.style.left = (touch.clientX - rect.width / 2) + 'px';
+  touchGhost.style.top = (touch.clientY - rect.height / 2) + 'px';
+
+  document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+  const target = document.elementFromPoint(touch.clientX, touch.clientY);
+  if (target) {
+    const dz = target.closest('.tier-dropzone');
+    const pool = target.closest('.pool-grid');
+    if (dz) dz.classList.add('drag-over');
+    if (pool) pool.classList.add('drag-over');
+  }
+  e.preventDefault();
+}
+
+function onTouchEnd(e) {
+  if (!touchGhost) return;
+  const touch = e.changedTouches[0];
+  document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+
+  const target = document.elementFromPoint(touch.clientX, touch.clientY);
+  if (target) {
+    const dz = target.closest('.tier-dropzone');
+    const pool = target.closest('.pool-grid');
+    if (dz) {
+      moveCardToTier(touchCaseId, dz.dataset.tier);
+    } else if (pool) {
+      moveCardToPool(touchCaseId);
+    }
+  }
+
+  if (touchStartEl) touchStartEl.classList.remove('dragging');
+  touchGhost.remove();
+  touchGhost = null;
+  touchStartEl = null;
+  touchCaseId = null;
+}
+
+// ===== PROGRESS =====
+function updateProgress() {
+  const count = Object.keys(placements).length;
+  document.getElementById('placedCount').textContent = count;
+  const btn = document.getElementById('submitBtn');
+  if (count === CASES.length) {
+    btn.classList.add('ready');
+  } else {
+    btn.classList.remove('ready');
+  }
+}
+
+// ===== SUBMIT =====
+function submitTier() {
+  const count = Object.keys(placements).length;
+  if (count < CASES.length) {
+    alert(`모든 카드를 배치해주세요! (${count}/${CASES.length})`);
+    return;
+  }
+  // Save
+  const results = getResults();
+  results.push({
+    name: currentName,
+    timestamp: Date.now(),
+    placements: { ...placements },
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(results));
+
+  // Confetti
+  launchConfetti();
+
+  document.getElementById('doneSub').textContent = `${currentName}님의 킹받음 티어가 저장되었어요!`;
+  showScreen('doneScreen');
+}
+
+// ===== RESULTS =====
+function getResults() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  } catch { return []; }
+}
+
+function switchResultTab(tab, btn) {
+  document.querySelectorAll('.results-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('dashboardTab').style.display = tab === 'dashboard' ? 'block' : 'none';
+  document.getElementById('participantsTab').style.display = tab === 'participants' ? 'block' : 'none';
+}
+
+function renderResults() {
+  renderDashboard();
+  renderParticipants();
+}
+
+function renderDashboard() {
+  const results = getResults();
+  const el = document.getElementById('dashboardTab');
+
+  if (results.length === 0) {
+    el.innerHTML = '<div class="no-data">아직 참여 기록이 없습니다</div>';
+    return;
+  }
+
+  // Compute average scores (S=6, A=5, B=4, C=3, D=2, E=1)
+  const tierScoreMap = { S: 6, A: 5, B: 4, C: 3, D: 2, E: 1 };
+  const caseScores = {};
+  CASES.forEach(c => { caseScores[c.id] = { total: 0, count: 0 }; });
+
+  results.forEach(r => {
+    Object.entries(r.placements).forEach(([caseId, tierId]) => {
+      if (caseScores[caseId]) {
+        caseScores[caseId].total += tierScoreMap[tierId] || 0;
+        caseScores[caseId].count += 1;
+      }
+    });
+  });
+
+  const ranked = CASES.map(c => ({
+    ...c,
+    avg: caseScores[c.id].count > 0 ? caseScores[c.id].total / caseScores[c.id].count : 0,
+  })).sort((a, b) => b.avg - a.avg);
+
+  // Rank list
+  const rankColors = ['#FF7F7F', '#FFBF7F', '#FFDF7F', '#FFFF7F', '#BFFF7F', '#7FBFFF', '#BF7FFF', '#FF7FBF', '#7FFFFF', '#CFCFCF'];
+  let rankHtml = `
+    <div class="agg-section">
+      <div class="agg-title">&#x1F3C6; 킹받음 순위 (${results.length}명 참여)</div>
+      <div class="agg-rank-list">
+  `;
+  ranked.forEach((c, i) => {
+    const pct = (c.avg / 6) * 100;
+    rankHtml += `
+      <div class="agg-rank-item">
+        <div class="agg-rank-num" style="background:${rankColors[i]}">${i + 1}</div>
+        <div class="agg-rank-name">${c.label}</div>
+        <div class="agg-rank-score">${c.avg.toFixed(1)}점</div>
+        <div class="agg-rank-bar">
+          <div class="agg-rank-bar-fill" style="width:${pct}%; background:${rankColors[i]}"></div>
+        </div>
+      </div>
+    `;
+  });
+  rankHtml += '</div></div>';
+
+  // Heatmap
+  const tierCounts = {};
+  CASES.forEach(c => {
+    tierCounts[c.id] = {};
+    TIERS.forEach(t => { tierCounts[c.id][t.id] = 0; });
+  });
+  results.forEach(r => {
+    Object.entries(r.placements).forEach(([caseId, tierId]) => {
+      if (tierCounts[caseId] && tierCounts[caseId][tierId] !== undefined) {
+        tierCounts[caseId][tierId]++;
+      }
+    });
+  });
+
+  let heatHtml = '<div class="agg-section"><div class="agg-title">&#x1F4CA; 티어 분포</div><div class="heatmap-grid">';
+  ranked.forEach(c => {
+    heatHtml += `<div class="heatmap-row"><div class="heatmap-label">${c.label}</div><div class="heatmap-bar">`;
+    TIERS.forEach(t => {
+      const cnt = tierCounts[c.id][t.id];
+      const pct = results.length > 0 ? (cnt / results.length) * 100 : 0;
+      if (pct > 0) {
+        heatHtml += `<div class="heatmap-seg" style="width:${pct}%;background:${t.color}" title="${t.label}: ${cnt}명">${pct >= 20 ? t.id : ''}</div>`;
+      }
+    });
+    heatHtml += '</div></div>';
+  });
+  heatHtml += '</div></div>';
+
+  el.innerHTML = rankHtml + heatHtml;
+}
+
+function renderParticipants() {
+  const results = getResults();
+  const el = document.getElementById('participantsTab');
+
+  if (results.length === 0) {
+    el.innerHTML = '<div class="no-data">아직 참여 기록이 없습니다</div>';
+    return;
+  }
+
+  const avatarColors = ['#FF6B6B', '#FFA502', '#2ED573', '#1E90FF', '#A855F7', '#FF6348', '#3742FA', '#FF4757'];
+
+  let html = '<div class="participant-list">';
+  results.slice().reverse().forEach((r, i) => {
+    const idx = results.length - 1 - i;
+    const date = new Date(r.timestamp);
+    const dateStr = `${date.getFullYear()}.${String(date.getMonth()+1).padStart(2,'0')}.${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+    const color = avatarColors[idx % avatarColors.length];
+    html += `
+      <div class="participant-item" onclick="showDetail(${idx})">
+        <div class="participant-avatar" style="background:${color}">${r.name.charAt(0)}</div>
+        <div class="participant-info">
+          <div class="participant-name">${escapeHtml(r.name)}</div>
+          <div class="participant-time">${dateStr}</div>
+        </div>
+        <button class="participant-delete" onclick="event.stopPropagation(); deleteParticipant(${idx})">삭제</button>
+      </div>
+    `;
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function deleteParticipant(idx) {
+  if (!confirm('이 참여 기록을 삭제하시겠습니까?')) return;
+  const results = getResults();
+  results.splice(idx, 1);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(results));
+  renderResults();
+}
+
+function showDetail(idx) {
+  const results = getResults();
+  const r = results[idx];
+  if (!r) return;
+
+  document.getElementById('modalTitle').textContent = `${r.name}님의 배치`;
+
+  let html = '<div class="modal-tier-list">';
+  TIERS.forEach(t => {
+    const items = Object.entries(r.placements)
+      .filter(([_, tid]) => tid === t.id)
+      .map(([cid]) => CASES.find(c => c.id === cid))
+      .filter(Boolean);
+
+    html += `
+      <div class="modal-tier-row">
+        <div class="modal-tier-label" style="background:${t.color}">${t.label}</div>
+        <div class="modal-tier-items">
+          ${items.length > 0 ? items.map(c => `<div class="modal-tier-item">${c.label}</div>`).join('') : '<span style="color:#555;font-size:12px">-</span>'}
+        </div>
+      </div>
+    `;
+  });
+  html += '</div>';
+
+  document.getElementById('modalBody').innerHTML = html;
+  document.getElementById('detailModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('detailModal').classList.remove('open');
+}
+document.getElementById('detailModal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+// ===== CONFETTI =====
+function launchConfetti() {
+  const colors = ['#FF7F7F', '#FFBF7F', '#FFDF7F', '#FFFF7F', '#BFFF7F', '#7FBFFF', '#FF6B6B', '#FFA502'];
+  for (let i = 0; i < 50; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.left = Math.random() * 100 + 'vw';
+    piece.style.top = '-10px';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    piece.style.width = (6 + Math.random() * 8) + 'px';
+    piece.style.height = (6 + Math.random() * 8) + 'px';
+    document.body.appendChild(piece);
+
+    const duration = 1500 + Math.random() * 1500;
+    const xDrift = (Math.random() - 0.5) * 200;
+    piece.animate([
+      { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+      { transform: `translate(${xDrift}px, ${window.innerHeight + 20}px) rotate(${Math.random()*720}deg)`, opacity: 0 },
+    ], { duration, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' }).onfinish = () => piece.remove();
+  }
+}
+
+// ===== UTILS =====
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+</script>
+</body>
+</html>
