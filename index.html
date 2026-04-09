@@ -81,22 +81,25 @@
   .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,107,107,0.25); }
   .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
   .start-divider {
-    width: 200px;
+    width: 320px;
+    max-width: 90vw;
     height: 1px;
     background: rgba(255,255,255,0.06);
     margin: 32px 0 24px;
   }
-  .start-bottom-btns { display: flex; gap: 12px; }
   .btn-ghost {
-    padding: 12px 28px;
+    width: 320px;
+    max-width: 90vw;
+    padding: 14px 20px;
     border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 10px;
+    border-radius: 14px;
     background: transparent;
     color: #888;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 500;
     cursor: pointer;
     font-family: 'Pretendard', sans-serif;
+    box-sizing: border-box;
     transition: all 0.2s;
   }
   .btn-ghost:hover { background: rgba(255,255,255,0.05); color: #bbb; border-color: rgba(255,255,255,0.2); }
@@ -691,10 +694,7 @@
     <button class="btn-primary" id="startBtn" onclick="startGame()" disabled>배치하러 가기</button>
   </div>
   <div class="start-divider"></div>
-  <div class="start-bottom-btns">
-    <button class="btn-ghost" onclick="showScreen('resultsScreen'); renderResults();">종합 결과 보기</button>
-    <button class="btn-ghost" onclick="showScreen('resultsScreen'); switchResultTab('participants', document.querySelector('[data-tab=participants]')); renderResults();">참여 기록</button>
-  </div>
+  <button class="btn-ghost" onclick="showScreen('resultsScreen'); renderResults();">결과 보러가기</button>
 </div>
 
 <!-- ===== SORT (one at a time) ===== -->
