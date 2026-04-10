@@ -28,8 +28,8 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 @keyframes floatBlob{0%,100%{transform:translate(0,0);}50%{transform:translate(30px,-20px);}}
 
 .start-content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;}
-.start-chick{margin-bottom:24px;}
-.start-chick svg{width:100px;height:70px;animation:chickBreathe 3s ease-in-out infinite;}
+.start-chick{margin-bottom:16px;margin-top:8px;}
+.start-chick svg{width:80px;height:56px;animation:chickBreathe 3s ease-in-out infinite;}
 .start-chick-bubble{
   display:inline-block;padding:8px 16px;
   background:#FFF9DB;color:#191B20;font-size:13px;font-weight:600;
@@ -328,7 +328,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 .heat-legend-d{width:10px;height:10px;border-radius:3px;}
 
 /* Participants */
-.p-list{display:flex;flex-direction:column;gap:6px;}
+.p-list{display:flex;flex-direction:column;gap:6px;width:100%;}
 .p-item{
   display:flex;align-items:center;gap:14px;
   padding:14px 16px;background:#22242A;border:1px solid #2E3038;
@@ -447,7 +447,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 <!-- RESULTS -->
 <div id="resultsScreen" class="screen">
   <div class="r-wrap">
-    <div class="r-header"><h2>종합 결과</h2><button class="r-back" onclick="showScreen('startScreen');">돌아가기</button></div>
+    <div class="r-header"><h2>결과 모아보기</h2><button class="r-back" onclick="showScreen('startScreen');">돌아가기</button></div>
     <div class="r-sub" id="rSub"></div>
     <div class="r-tabs">
       <button class="r-tab active" data-tab="dash" onclick="swTab('dash',this)">대시보드</button>
@@ -494,6 +494,8 @@ const RV={
   growth:'1년 후 성장하고 있을 것 같아요',recommend:'기업을 추천해요',
 };
 const SK='tier_maker_results';
+const API='https://tier-maker-api.jelin.workers.dev';
+let cachedResults=null;
 const CHICK_RANDOM=['어떤게 제일 킹 받아?','고민되면 직감을 따라!','병아리도 궁금해~','흠... 진지하게 골라봐!','리뷰 잘 읽어봐~','오 고민되지?'];
 const CHICK_CTX={0:'자, 시작해볼까?',1:'좋은 시작이야!',2:'오~ 감 잡았네!',3:'벌써 반이나 했어!',4:'거의 다 왔어!',5:'마지막 하나!',6:'다 했다! 제출해줘~'};
 const CHICK_HI=['와 이건 진짜 킹받는구나?','오 확실히 킹받지!','인정~ 나도 킹받아'];
@@ -771,22 +773,23 @@ function setChick(msg){
   chickTimer=setTimeout(()=>svg.classList.remove('chick-speaking'),2000);
 }
 
-function submitTier(){
+async function submitTier(){
   if(Object.keys(placements).length<CASES.length){alert('모든 카드를 배치해주세요!');return;}
-  const r=getResults();r.push({name:currentName,timestamp:Date.now(),placements:{...placements}});
-  localStorage.setItem(SK,JSON.stringify(r));launchConfetti();
+  const entry={name:currentName,timestamp:Date.now(),placements:{...placements}};
+  try{await fetch(API+'/results',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(entry)});}catch(e){console.error(e);}
+  cachedResults=null;launchConfetti();
   document.getElementById('doneSub').textContent=`${currentName}님의 킹받음 티어가 저장되었어요!`;
   showScreen('doneScreen');
 }
 
-function getResults(){try{return JSON.parse(localStorage.getItem(SK))||[];}catch{return[];}}
+async function getResults(){try{const r=await fetch(API+'/results');return await r.json();}catch(e){console.error(e);return[];}}
 function swTab(t,btn){
   document.querySelectorAll('.r-tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
   document.getElementById('dashTab').style.display=t==='dash'?'block':'none';
   document.getElementById('ptcpTab').style.display=t==='ptcp'?'block':'none';
 }
-function renderResults(){
-  const r=getResults();
+async function renderResults(){
+  const r=await getResults();cachedResults=r;
   document.getElementById('rSub').textContent=r.length?`${r.length}명이 참여했어요`:'';
   document.querySelectorAll('.r-tab').forEach(x=>x.classList.remove('active'));
   document.querySelector('[data-tab="dash"]').classList.add('active');
@@ -843,9 +846,9 @@ function renderPtcp(res){
   h+=`<div class="p-item" onclick="showDetail(${idx})"><div class="p-avatar" style="background:${cols[idx%cols.length]}">${esc(r.name).charAt(0)}</div><div class="p-info"><div class="p-name">${esc(r.name)}</div><div class="p-time">${ds}</div></div><button class="p-del" onclick="event.stopPropagation();delP(${idx})">삭제</button><div class="p-arrow">&#8250;</div></div>`;});
   h+='</div>';el.innerHTML=h;
 }
-function delP(i){if(!confirm('삭제할까요?'))return;const r=getResults();r.splice(i,1);localStorage.setItem(SK,JSON.stringify(r));renderResults();}
-function showDetail(i){
-  const r=getResults()[i];if(!r)return;
+async function delP(i){if(!confirm('삭제할까요?'))return;try{await fetch(API+'/results/'+i,{method:'DELETE'});}catch(e){console.error(e);}cachedResults=null;renderResults();}
+async function showDetail(i){
+  const all=cachedResults||await getResults();const r=all[i];if(!r)return;
   document.getElementById('mTitle').textContent=`${r.name}님의 배치`;
   let h='<div class="modal-tl">';
   TIERS.forEach(t=>{const items=Object.entries(r.placements).filter(([_,ti])=>ti===t.id).map(([ci])=>CASES.find(c=>c.id===ci)).filter(Boolean);
