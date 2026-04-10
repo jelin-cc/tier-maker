@@ -209,7 +209,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 .chick-svg{width:80px;height:56px;animation:chickBreathe 3s ease-in-out infinite;}
 
 /* Beak animation */
-.chick-beak{transform-origin:86px 51px;transition:transform .15s;}
+.chick-beak{transform-origin:93px 48px;transition:transform .15s;}
 .chick-speaking .chick-beak{animation:beakOmu .3s ease-in-out 6 alternate;}
 @keyframes beakOmu{
   0%{transform:scale(1);}
@@ -382,13 +382,14 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
     <div class="start-chick">
       <div class="start-chick-bubble">어떤게 제일 킹 받을까?</div><br>
       <svg viewBox="0 0 150 100" fill="none" width="120" height="80">
-        <defs><radialGradient id="cg1" cx="50%" cy="30%" r="65%"><stop offset="0%" stop-color="#FFE566"/><stop offset="100%" stop-color="#FFD93D"/></radialGradient></defs>
-        <ellipse cx="75" cy="92" rx="55" ry="5" fill="#000" opacity=".07"/>
+        <defs><radialGradient id="cg1" cx="60%" cy="25%" r="70%"><stop offset="0%" stop-color="#FFE84D"/><stop offset="65%" stop-color="#FFC800"/><stop offset="100%" stop-color="#F5A800"/></radialGradient></defs>
+        <ellipse cx="72" cy="93" rx="56" ry="5" fill="#000" opacity=".08"/>
+        <ellipse cx="14" cy="76" rx="13" ry="8" fill="#E87000"/>
         <path d="M28,78 C22,45 40,15 75,12 C110,9 135,35 132,65 C130,82 100,90 75,90 C45,90 32,86 28,78Z" fill="url(#cg1)"/>
-        <path d="M100,38 Q118,52 105,70" stroke="#F0D830" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <circle cx="78" cy="46" r="3" fill="#3E2723"/><circle cx="93" cy="44" r="3" fill="#3E2723"/>
-        <ellipse cx="86" cy="51" rx="3.5" ry="3" fill="#D4845A"/>
-        <circle cx="58" cy="62" r="8" fill="#F0B088" opacity=".4"/><circle cx="112" cy="58" r="7.5" fill="#F0B088" opacity=".4"/>
+        <path d="M102,50 Q118,58 108,74" stroke="#EAC000" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".4"/>
+        <path d="M95,72 Q108,68 118,76" stroke="#EAC000" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".3"/>
+        <circle cx="85" cy="42" r="3" fill="#3E2723"/><circle cx="100" cy="40" r="3" fill="#3E2723"/>
+        <ellipse cx="93" cy="48" rx="3.5" ry="3" fill="#E08050"/>
       </svg>
     </div>
     <div class="start-marquee"><div class="marquee-track" id="marqueeTrack"></div></div>
@@ -420,13 +421,14 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
       <div class="chick-area" id="chickArea">
         <div class="chick-bubble" id="chickBubble"></div>
         <svg class="chick-svg" id="chickSvg" viewBox="0 0 150 100" fill="none">
-          <defs><radialGradient id="cg2" cx="50%" cy="30%" r="65%"><stop offset="0%" stop-color="#FFE566"/><stop offset="100%" stop-color="#FFD93D"/></radialGradient></defs>
-          <ellipse cx="75" cy="92" rx="55" ry="5" fill="#000" opacity=".07"/>
+          <defs><radialGradient id="cg2" cx="60%" cy="25%" r="70%"><stop offset="0%" stop-color="#FFE84D"/><stop offset="65%" stop-color="#FFC800"/><stop offset="100%" stop-color="#F5A800"/></radialGradient></defs>
+          <ellipse cx="72" cy="93" rx="56" ry="5" fill="#000" opacity=".08"/>
+          <ellipse cx="14" cy="76" rx="13" ry="8" fill="#E87000"/>
           <path d="M28,78 C22,45 40,15 75,12 C110,9 135,35 132,65 C130,82 100,90 75,90 C45,90 32,86 28,78Z" fill="url(#cg2)"/>
-          <path d="M100,38 Q118,52 105,70" stroke="#F0D830" stroke-width="2" fill="none" stroke-linecap="round"/>
-          <circle cx="78" cy="46" r="3" fill="#3E2723"/><circle cx="93" cy="44" r="3" fill="#3E2723"/>
-          <ellipse class="chick-beak" cx="86" cy="51" rx="3.5" ry="3" fill="#D4845A"/>
-          <circle cx="58" cy="62" r="8" fill="#F0B088" opacity=".4"/><circle cx="112" cy="58" r="7.5" fill="#F0B088" opacity=".4"/>
+          <path d="M102,50 Q118,58 108,74" stroke="#EAC000" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".4"/>
+          <path d="M95,72 Q108,68 118,76" stroke="#EAC000" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".3"/>
+          <circle cx="85" cy="42" r="3" fill="#3E2723"/><circle cx="100" cy="40" r="3" fill="#3E2723"/>
+          <ellipse class="chick-beak" cx="93" cy="48" rx="3.5" ry="3" fill="#E08050"/>
         </svg>
       </div>
     </div>
