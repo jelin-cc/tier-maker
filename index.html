@@ -209,7 +209,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 .chick-svg{width:80px;height:56px;animation:chickBreathe 3s ease-in-out infinite;}
 
 /* Beak animation */
-.chick-beak{transform-origin:62px 66px;transition:transform .15s;}
+.chick-beak{transform-origin:140px 70px;transition:transform .15s;}
 .chick-speaking .chick-beak{animation:beakOmu .3s ease-in-out 6 alternate;}
 @keyframes beakOmu{
   0%{transform:scale(1);}
@@ -418,17 +418,14 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
       <div class="t-card-area" id="cardArea"></div>
       <div class="chick-area" id="chickArea">
         <div class="chick-bubble" id="chickBubble"></div>
-        <svg class="chick-svg" id="chickSvg" viewBox="0 0 120 140" fill="none">
-          <defs><radialGradient id="cg2" cx="50%" cy="30%" r="65%"><stop offset="0%" stop-color="#FFE84D"/><stop offset="70%" stop-color="#FFC107"/><stop offset="100%" stop-color="#F5A623"/></radialGradient></defs>
-          <line x1="52" y1="14" x2="48" y2="2" stroke="#D4A000" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="60" y1="12" x2="60" y2="0" stroke="#D4A000" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="68" y1="14" x2="72" y2="2" stroke="#D4A000" stroke-width="2.5" stroke-linecap="round"/>
-          <ellipse cx="45" cy="126" rx="9" ry="5" fill="#E8870D"/>
-          <ellipse cx="75" cy="126" rx="9" ry="5" fill="#E8870D"/>
-          <path d="M12,100 C4,60 18,18 60,10 C102,2 116,42 116,72 C116,105 92,122 60,122 C28,122 16,114 12,100Z" fill="url(#cg2)"/>
-          <path d="M92,80 Q102,72 100,92" stroke="#DBA800" stroke-width="1.2" fill="none" stroke-linecap="round" opacity=".4"/>
-          <circle cx="52" cy="56" r="4" fill="#3E2723"/><circle cx="72" cy="56" r="4" fill="#3E2723"/>
-          <ellipse class="chick-beak" cx="62" cy="66" rx="5" ry="4" fill="#E08050"/>
+        <svg class="chick-svg" id="chickSvg" viewBox="0 0 200 140" fill="none" style="transform:scaleX(-1)">
+          <defs><radialGradient id="cg2" cx="55%" cy="30%" r="65%"><stop offset="0%" stop-color="#FFE84D"/><stop offset="70%" stop-color="#FFC107"/><stop offset="100%" stop-color="#F5A623"/></radialGradient></defs>
+          <ellipse cx="95" cy="128" rx="75" ry="6" fill="#000" opacity=".06"/>
+          <ellipse cx="22" cy="108" rx="18" ry="11" fill="#E8870D"/>
+          <path d="M38,110 C30,65 50,22 100,16 C150,10 178,48 176,90 C174,115 140,126 100,126 C60,126 42,120 38,110Z" fill="url(#cg2)"/>
+          <path d="M130,92 Q148,84 142,104" stroke="#DBA800" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".4"/>
+          <circle cx="128" cy="54" r="4.5" fill="#3E2723"/><circle cx="148" cy="60" r="4.5" fill="#3E2723"/>
+          <ellipse class="chick-beak" cx="140" cy="70" rx="5" ry="4" fill="#E08050"/>
         </svg>
       </div>
     </div>
