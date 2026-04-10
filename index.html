@@ -502,7 +502,7 @@ const CHICK_LO=['이건 별로 안 킹받아?','쿨하네~','음 그래?'];
 let currentName='',placements={},cardQueue=[],animating=false;
 
 
-function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function showScreen(id){chipPrev.classList.remove('visible');document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
 const nameInput=document.getElementById('nameInput'),startBtn=document.getElementById('startBtn');
 nameInput.addEventListener('input',()=>{startBtn.disabled=!nameInput.value.trim();});
 nameInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&nameInput.value.trim())startGame();});
@@ -638,6 +638,7 @@ function moveChip(cid,dir){
   const curIdx=TIERS.findIndex(t=>t.id===curTier);
   const newIdx=dir==='up'?curIdx-1:curIdx+1;
   if(newIdx<0||newIdx>=TIERS.length)return;
+  chipPrev.classList.remove('visible');
   placements[cid]=TIERS[newIdx].id;
   const chip=document.querySelector(`.tier-chip[data-case-id="${cid}"]`);
   const target=document.querySelector(`.tier-row-chips[data-tier="${TIERS[newIdx].id}"]`);
