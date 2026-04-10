@@ -134,6 +134,17 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 }
 .tier-chip-thumb .rc{transform:scale(.25);transform-origin:top left;width:400%;pointer-events:none;}
 .tier-chip-label{font-size:10px;font-weight:600;color:#ECECEC;white-space:nowrap;}
+.tier-chip-arrows{
+  position:absolute;right:3px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:2px;opacity:0;transition:opacity .15s;z-index:3;
+}
+.tier-chip:hover .tier-chip-arrows{opacity:1;}
+.tier-chip-arrow{
+  width:20px;height:20px;border:none;border-radius:5px;
+  background:rgba(0,0,0,.55);color:#fff;font-size:10px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;line-height:1;
+}
+.tier-chip-arrow:hover{background:rgba(0,0,0,.85);}
 .tier-chip.chip-dragging{opacity:.3;transform:scale(.95);}
 .chip-drag-clone{
   position:fixed;z-index:10000;pointer-events:none;opacity:.9;
@@ -531,7 +542,7 @@ function placeCurrent(tid){
   const card=document.getElementById('currentCard');if(card)card.className='t-card slide-out';
   const ca=document.querySelector(`.tier-row-chips[data-tier="${tid}"]`);
   const chip=document.createElement('div');chip.className='tier-chip';chip.dataset.caseId=c.id;
-  chip.innerHTML=`<div class="tier-chip-thumb">${buildRC(c.bf)}</div><div class="tier-chip-label">${c.label}</div>`;
+  chip.innerHTML=`<div class="tier-chip-thumb">${buildRC(c.bf)}</div><div class="tier-chip-label">${c.label}</div><div class="tier-chip-arrows"><button class="tier-chip-arrow" onclick="event.stopPropagation();moveChip('${c.id}','up')">&#9650;</button><button class="tier-chip-arrow" onclick="event.stopPropagation();moveChip('${c.id}','down')">&#9660;</button></div>`;
   chip.addEventListener('mousedown',e=>onChipDragStart(e,c.id));
   chip.addEventListener('touchstart',e=>onChipTouchStart(e,c.id),{passive:false});
   chip.addEventListener('mouseenter',onChipEnter);
@@ -615,6 +626,16 @@ function endChipDrag(x,y){
     }
   }
   chipDragId=null;
+}
+function moveChip(cid,dir){
+  const curTier=placements[cid];
+  const curIdx=TIERS.findIndex(t=>t.id===curTier);
+  const newIdx=dir==='up'?curIdx-1:curIdx+1;
+  if(newIdx<0||newIdx>=TIERS.length)return;
+  placements[cid]=TIERS[newIdx].id;
+  const chip=document.querySelector(`.tier-chip[data-case-id="${cid}"]`);
+  const target=document.querySelector(`.tier-row-chips[data-tier="${TIERS[newIdx].id}"]`);
+  if(chip&&target)target.appendChild(chip);
 }
 function buildRC(bf){
   const b=f=>bf.includes(f)?'blurred':'',d=RV;
