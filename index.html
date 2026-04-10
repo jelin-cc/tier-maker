@@ -209,7 +209,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 .chick-svg{width:80px;height:56px;animation:chickBreathe 3s ease-in-out infinite;}
 
 /* Beak animation */
-.chick-beak{transform-origin:93px 48px;transition:transform .15s;}
+.chick-beak{transform-origin:62px 66px;transition:transform .15s;}
 .chick-speaking .chick-beak{animation:beakOmu .3s ease-in-out 6 alternate;}
 @keyframes beakOmu{
   0%{transform:scale(1);}
@@ -262,7 +262,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 
 /* ===== RESULTS ===== */
 #resultsScreen{padding:0;background:#191B20;overflow-y:auto;}
-.r-wrap{max-width:1060px;margin:0 auto;padding:32px 32px 60px;}
+.r-wrap{max-width:1060px;margin:0 auto;padding:32px 0 60px;}
 .r-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
 .r-header h2{font-size:24px;font-weight:800;}
 .r-sub{font-size:14px;color:#4E5058;margin-bottom:28px;}
@@ -380,15 +380,14 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
   <div class="start-content">
     <div class="start-chick">
       <div class="start-chick-bubble">어떤게 제일 킹 받을까?</div><br>
-      <svg viewBox="0 0 150 100" fill="none" width="120" height="80">
-        <defs><radialGradient id="cg1" cx="60%" cy="25%" r="70%"><stop offset="0%" stop-color="#FFE84D"/><stop offset="65%" stop-color="#FFC800"/><stop offset="100%" stop-color="#F5A800"/></radialGradient></defs>
-        <ellipse cx="72" cy="93" rx="56" ry="4" fill="#000" opacity=".06"/>
-        <ellipse cx="58" cy="88" rx="7" ry="4" fill="#E87000"/><ellipse cx="80" cy="89" rx="7" ry="4" fill="#E87000"/>
-        <path d="M28,78 C22,45 40,15 75,12 C110,9 135,35 132,65 C130,82 100,90 75,90 C45,90 32,86 28,78Z" fill="url(#cg1)"/>
-        <path d="M102,50 Q116,58 108,72" stroke="#EAC000" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".35"/>
-        <line x1="70" y1="13" x2="66" y2="3" stroke="#D4A000" stroke-width="2" stroke-linecap="round"/><line x1="76" y1="11" x2="77" y2="1" stroke="#D4A000" stroke-width="2" stroke-linecap="round"/><line x1="82" y1="12" x2="86" y2="3" stroke="#D4A000" stroke-width="2" stroke-linecap="round"/>
-        <circle cx="85" cy="42" r="3" fill="#3E2723"/><circle cx="100" cy="40" r="3" fill="#3E2723"/>
-        <ellipse cx="93" cy="48" rx="3.5" ry="3" fill="#E08050"/>
+      <svg viewBox="0 0 200 140" fill="none" width="100" height="70">
+        <defs><radialGradient id="cg1" cx="55%" cy="30%" r="65%"><stop offset="0%" stop-color="#FFE84D"/><stop offset="70%" stop-color="#FFC107"/><stop offset="100%" stop-color="#F5A623"/></radialGradient></defs>
+        <ellipse cx="95" cy="128" rx="75" ry="6" fill="#000" opacity=".06"/>
+        <ellipse cx="22" cy="108" rx="18" ry="11" fill="#E8870D"/>
+        <path d="M38,110 C30,65 50,22 100,16 C150,10 178,48 176,90 C174,115 140,126 100,126 C60,126 42,120 38,110Z" fill="url(#cg1)"/>
+        <path d="M130,92 Q148,84 142,104" stroke="#DBA800" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".4"/>
+        <circle cx="128" cy="54" r="4.5" fill="#3E2723"/><circle cx="148" cy="60" r="4.5" fill="#3E2723"/>
+        <ellipse cx="140" cy="70" rx="5" ry="4" fill="#E08050"/>
       </svg>
     </div>
     <div class="start-marquee"><div class="marquee-track" id="marqueeTrack"></div></div>
@@ -419,15 +418,17 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
       <div class="t-card-area" id="cardArea"></div>
       <div class="chick-area" id="chickArea">
         <div class="chick-bubble" id="chickBubble"></div>
-        <svg class="chick-svg" id="chickSvg" viewBox="0 0 150 100" fill="none">
-          <defs><radialGradient id="cg2" cx="60%" cy="25%" r="70%"><stop offset="0%" stop-color="#FFE84D"/><stop offset="65%" stop-color="#FFC800"/><stop offset="100%" stop-color="#F5A800"/></radialGradient></defs>
-          <ellipse cx="72" cy="93" rx="56" ry="4" fill="#000" opacity=".06"/>
-          <ellipse cx="58" cy="88" rx="7" ry="4" fill="#E87000"/><ellipse cx="80" cy="89" rx="7" ry="4" fill="#E87000"/>
-          <path d="M28,78 C22,45 40,15 75,12 C110,9 135,35 132,65 C130,82 100,90 75,90 C45,90 32,86 28,78Z" fill="url(#cg2)"/>
-          <path d="M102,50 Q116,58 108,72" stroke="#EAC000" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".35"/>
-          <line x1="70" y1="13" x2="66" y2="3" stroke="#D4A000" stroke-width="2" stroke-linecap="round"/><line x1="76" y1="11" x2="77" y2="1" stroke="#D4A000" stroke-width="2" stroke-linecap="round"/><line x1="82" y1="12" x2="86" y2="3" stroke="#D4A000" stroke-width="2" stroke-linecap="round"/>
-          <circle cx="85" cy="42" r="3" fill="#3E2723"/><circle cx="100" cy="40" r="3" fill="#3E2723"/>
-          <ellipse class="chick-beak" cx="93" cy="48" rx="3.5" ry="3" fill="#E08050"/>
+        <svg class="chick-svg" id="chickSvg" viewBox="0 0 120 140" fill="none">
+          <defs><radialGradient id="cg2" cx="50%" cy="30%" r="65%"><stop offset="0%" stop-color="#FFE84D"/><stop offset="70%" stop-color="#FFC107"/><stop offset="100%" stop-color="#F5A623"/></radialGradient></defs>
+          <line x1="52" y1="14" x2="48" y2="2" stroke="#D4A000" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="60" y1="12" x2="60" y2="0" stroke="#D4A000" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="68" y1="14" x2="72" y2="2" stroke="#D4A000" stroke-width="2.5" stroke-linecap="round"/>
+          <ellipse cx="45" cy="126" rx="9" ry="5" fill="#E8870D"/>
+          <ellipse cx="75" cy="126" rx="9" ry="5" fill="#E8870D"/>
+          <path d="M12,100 C4,60 18,18 60,10 C102,2 116,42 116,72 C116,105 92,122 60,122 C28,122 16,114 12,100Z" fill="url(#cg2)"/>
+          <path d="M92,80 Q102,72 100,92" stroke="#DBA800" stroke-width="1.2" fill="none" stroke-linecap="round" opacity=".4"/>
+          <circle cx="52" cy="56" r="4" fill="#3E2723"/><circle cx="72" cy="56" r="4" fill="#3E2723"/>
+          <ellipse class="chick-beak" cx="62" cy="66" rx="5" ry="4" fill="#E08050"/>
         </svg>
       </div>
     </div>
