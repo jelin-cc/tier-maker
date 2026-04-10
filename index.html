@@ -134,17 +134,13 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 }
 .tier-chip-thumb .rc{transform:scale(.25);transform-origin:top left;width:400%;pointer-events:none;}
 .tier-chip-label{font-size:10px;font-weight:600;color:#ECECEC;white-space:nowrap;}
-.tier-chip-arrows{
-  position:absolute;right:3px;top:50%;transform:translateY(-50%);
-  display:flex;flex-direction:column;gap:2px;opacity:0;transition:opacity .15s;z-index:3;
+.tier-chip.chip-dragging{opacity:.3;transform:scale(.95);}
+.chip-drag-clone{
+  position:fixed;z-index:10000;pointer-events:none;opacity:.9;
+  transform:scale(.85);box-shadow:0 12px 40px rgba(0,0,0,.4);
+  border-radius:10px;overflow:hidden;background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.15);
 }
-.tier-chip:hover .tier-chip-arrows{opacity:1;}
-.tier-chip-arrow{
-  width:20px;height:20px;border:none;border-radius:5px;
-  background:rgba(0,0,0,.55);color:#fff;font-size:10px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;line-height:1;
-}
-.tier-chip-arrow:hover{background:rgba(0,0,0,.85);}
 /* Chip preview tooltip */
 .chip-preview{
   display:none;position:fixed;z-index:200;width:380px;
@@ -240,6 +236,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 .rc-footer{display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:8px;border-top:1px solid #F2F4F6;font-size:11px;color:#8B95A1;font-weight:500;}
 .rc-footer-sep{width:1px;height:10px;background:#E5E8EB;}
 .blurred{filter:blur(10px);user-select:none;pointer-events:none;}
+.rc-meta.blurred{filter:blur(5px);background:rgba(0,0,0,.06);border-radius:4px;padding:4px 8px;}
 
 /* ===== DONE ===== */
 #doneScreen{
@@ -534,8 +531,9 @@ function placeCurrent(tid){
   const card=document.getElementById('currentCard');if(card)card.className='t-card slide-out';
   const ca=document.querySelector(`.tier-row-chips[data-tier="${tid}"]`);
   const chip=document.createElement('div');chip.className='tier-chip';chip.dataset.caseId=c.id;
-  chip.innerHTML=`<div class="tier-chip-thumb">${buildRC(c.bf)}</div><div class="tier-chip-label">${c.label}</div><div class="tier-chip-arrows"><button class="tier-chip-arrow" onclick="event.stopPropagation();moveChip('${c.id}','up')">&#9650;</button><button class="tier-chip-arrow" onclick="event.stopPropagation();moveChip('${c.id}','down')">&#9660;</button></div>`;
-  chip.addEventListener('click',e=>{e.stopPropagation();removeChip(c.id);});
+  chip.innerHTML=`<div class="tier-chip-thumb">${buildRC(c.bf)}</div><div class="tier-chip-label">${c.label}</div>`;
+  chip.addEventListener('mousedown',e=>onChipDragStart(e,c.id));
+  chip.addEventListener('touchstart',e=>onChipTouchStart(e,c.id),{passive:false});
   chip.addEventListener('mouseenter',onChipEnter);
   chip.addEventListener('mousemove',onChipMove);
   chip.addEventListener('mouseleave',onChipLeave);
@@ -553,15 +551,70 @@ function removeChip(cid){
   if(chip){chip.classList.add('removing');setTimeout(()=>chip.remove(),250);}
   setTimeout(()=>showCard(),300);
 }
-function moveChip(cid,dir){
-  const curTier=placements[cid];
-  const curIdx=TIERS.findIndex(t=>t.id===curTier);
-  const newIdx=dir==='up'?curIdx-1:curIdx+1;
-  if(newIdx<0||newIdx>=TIERS.length)return;
-  placements[cid]=TIERS[newIdx].id;
-  const chip=document.querySelector(`.tier-chip[data-case-id="${cid}"]`);
-  const target=document.querySelector(`.tier-row-chips[data-tier="${TIERS[newIdx].id}"]`);
-  if(chip&&target)target.appendChild(chip);
+// Chip drag-and-drop between tiers
+let chipDragClone=null,chipDragId=null,chipDragStarted=false,chipDragSX=0,chipDragSY=0;
+function onChipDragStart(e,cid){
+  chipDragSX=e.clientX;chipDragSY=e.clientY;chipDragStarted=false;chipDragId=cid;
+  const onMove=ev=>{
+    if(!chipDragStarted&&(Math.abs(ev.clientX-chipDragSX)>5||Math.abs(ev.clientY-chipDragSY)>5)){
+      chipDragStarted=true;chipPrev.classList.remove('visible');startChipClone(cid,ev.clientX,ev.clientY);
+    }
+    if(chipDragStarted)moveChipClone(ev.clientX,ev.clientY);
+  };
+  const onUp=ev=>{
+    document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);
+    if(chipDragStarted)endChipDrag(ev.clientX,ev.clientY);
+    else{e.stopPropagation();removeChip(cid);}
+  };
+  document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onUp);
+}
+function onChipTouchStart(e,cid){
+  const t=e.touches[0];chipDragSX=t.clientX;chipDragSY=t.clientY;chipDragStarted=false;chipDragId=cid;
+  const onMove=ev=>{
+    const t2=ev.touches[0];
+    if(!chipDragStarted&&(Math.abs(t2.clientX-chipDragSX)>5||Math.abs(t2.clientY-chipDragSY)>5)){
+      chipDragStarted=true;chipPrev.classList.remove('visible');startChipClone(cid,t2.clientX,t2.clientY);
+    }
+    if(chipDragStarted){moveChipClone(t2.clientX,t2.clientY);ev.preventDefault();}
+  };
+  const onEnd=ev=>{
+    document.removeEventListener('touchmove',onMove);document.removeEventListener('touchend',onEnd);
+    if(chipDragStarted){const t2=ev.changedTouches[0];endChipDrag(t2.clientX,t2.clientY);}
+    else{e.stopPropagation();removeChip(cid);}
+  };
+  document.addEventListener('touchmove',onMove,{passive:false});document.addEventListener('touchend',onEnd);
+}
+function startChipClone(cid,x,y){
+  const chip=document.querySelector(`.tier-chip[data-case-id="${cid}"]`);if(!chip)return;
+  chip.classList.add('chip-dragging');
+  chipDragClone=chip.cloneNode(true);chipDragClone.className='chip-drag-clone';
+  chipDragClone.style.width=chip.offsetWidth+'px';
+  chipDragClone.style.left=(x-chip.offsetWidth/2)+'px';chipDragClone.style.top=(y-30)+'px';
+  document.body.appendChild(chipDragClone);
+}
+function moveChipClone(x,y){
+  if(!chipDragClone)return;
+  chipDragClone.style.left=(x-chipDragClone.offsetWidth/2)+'px';chipDragClone.style.top=(y-30)+'px';
+  document.querySelectorAll('.tier-row').forEach(r=>r.classList.remove('drag-over'));
+  const el=document.elementFromPoint(x,y);
+  if(el){const row=el.closest('.tier-row');if(row)row.classList.add('drag-over');}
+}
+function endChipDrag(x,y){
+  document.querySelectorAll('.tier-row').forEach(r=>r.classList.remove('drag-over'));
+  const chip=document.querySelector(`.tier-chip[data-case-id="${chipDragId}"]`);
+  if(chip)chip.classList.remove('chip-dragging');
+  if(chipDragClone){chipDragClone.remove();chipDragClone=null;}
+  const el=document.elementFromPoint(x,y);
+  if(el){
+    const row=el.closest('.tier-row');
+    if(row&&chip){
+      const newTier=row.dataset.tier;
+      placements[chipDragId]=newTier;
+      row.querySelector('.tier-row-chips').appendChild(chip);
+      row.classList.add('highlight');setTimeout(()=>row.classList.remove('highlight'),400);
+    }
+  }
+  chipDragId=null;
 }
 function buildRC(bf){
   const b=f=>bf.includes(f)?'blurred':'',d=RV;
