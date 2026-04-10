@@ -476,9 +476,10 @@ const CASES=[
   {id:'pros',label:'장점',hint:'장점 내용이 가려져 있어요',bf:['pros']},
   {id:'cons',label:'단점',hint:'단점 내용이 가려져 있어요',bf:['cons']},
   {id:'mgmt',label:'경영진에 바라는 점',hint:'경영진에 바라는 점이 가려져 있어요',bf:['mgmt']},
+  {id:'company',label:'기업명',hint:'기업명이 가려져 있어요',bf:['company']},
 ];
 const RV={
-  company:'(주)당근마켓',
+  company:'잡플래닛(유)',
   job:'개발',status:'현직원',location:'경기',date:'2024. 04 작성',
   score:'4.0',stars:4,
   dets:[{l:'승진 기회',p:80},{l:'복지/급여',p:80},{l:'워라밸',p:80},{l:'사내문화',p:80},{l:'경영진',p:80}],
@@ -641,7 +642,7 @@ function buildRC(bf){
   const b=f=>bf.includes(f)?'blurred':'',d=RV;
   const stars=Array.from({length:5},(_,i)=>`<span class="${i<d.stars?'rc-star-on':'rc-star-off'}">&#9733;</span>`).join('');
   const dets=d.dets.map(x=>`<div class="rc-det"><div class="rc-det-l">${x.l}</div><div class="rc-det-bar"><div class="rc-det-fill" style="width:${x.p}%"></div></div></div>`).join('');
-  return`<div class="rc"><div class="rc-top"><span class="rc-company">${d.company}</span></div>
+  return`<div class="rc"><div class="rc-top"><span class="rc-company ${b('company')}">${d.company}</span></div>
   <div class="rc-meta ${b('meta')}"><span>${d.job}</span><span class="rc-meta-sep"></span><span>${d.status}</span><span class="rc-meta-sep"></span><span>${d.location}</span><span class="rc-meta-sep"></span><span>${d.date}</span></div>
   <div class="rc-body"><div class="rc-left"><div class="rc-score ${b('score')}">${d.score}</div><div class="rc-stars ${b('stars')}">${stars}</div><div class="${b('dets')}">${dets}</div></div>
   <div class="rc-right"><div class="rc-title ${b('title')}">${d.title.replace(/\n/g,'<br>')}</div>
