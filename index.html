@@ -82,6 +82,25 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
 .start-mini:nth-child(6){animation-delay:2.5s;}
 @keyframes floatMini{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
 
+/* Marquee blinded review cards */
+.start-marquee{
+  width:100vw;overflow:hidden;margin-bottom:28px;
+  mask-image:linear-gradient(to right,transparent,#000 8%,#000 92%,transparent);
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 8%,#000 92%,transparent);
+}
+.marquee-track{display:flex;gap:16px;width:max-content;animation:marqueeScroll 45s linear infinite;}
+.marquee-card{
+  flex-shrink:0;width:260px;height:180px;background:#fff;border-radius:12px;
+  overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.25);position:relative;opacity:.7;
+}
+.marquee-card .rc{transform:scale(.65);transform-origin:top left;width:154%;}
+.marquee-tag{
+  position:absolute;bottom:0;left:0;right:0;padding:8px 10px;text-align:center;
+  background:linear-gradient(to top,rgba(0,0,0,.7) 40%,transparent);
+  color:#fff;font-size:11px;font-weight:700;letter-spacing:.3px;
+}
+@keyframes marqueeScroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
 /* ===== TIER SCREEN ===== */
 #tierScreen{overflow:hidden;}
 .t-header{
@@ -122,11 +141,27 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
   border-radius:0 12px 12px 0;
 }
 .tier-chip{
-  padding:8px 16px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);
-  border-radius:10px;font-size:13px;font-weight:600;color:#ECECEC;cursor:pointer;
-  transition:all .15s;white-space:nowrap;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:5px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);
+  border-radius:10px;cursor:pointer;transition:all .15s;position:relative;
 }
-.tier-chip:hover{background:rgba(255,255,255,0.14);transform:scale(1.05);}
+.tier-chip:hover{background:rgba(255,255,255,0.14);}
+.tier-chip-thumb{
+  width:100px;height:70px;background:#fff;border-radius:6px;overflow:hidden;
+}
+.tier-chip-thumb .rc{transform:scale(.25);transform-origin:top left;width:400%;pointer-events:none;}
+.tier-chip-label{font-size:10px;font-weight:600;color:#ECECEC;white-space:nowrap;}
+.tier-chip-arrows{
+  position:absolute;right:3px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:2px;opacity:0;transition:opacity .15s;z-index:3;
+}
+.tier-chip:hover .tier-chip-arrows{opacity:1;}
+.tier-chip-arrow{
+  width:20px;height:20px;border:none;border-radius:5px;
+  background:rgba(0,0,0,.55);color:#fff;font-size:10px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;line-height:1;
+}
+.tier-chip-arrow:hover{background:rgba(0,0,0,.85);}
 /* Chip preview tooltip */
 .chip-preview{
   display:none;position:fixed;z-index:200;width:380px;
@@ -364,6 +399,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
       </svg>
     </div>
     <div class="start-preview" id="startPreview"></div>
+    <div class="start-marquee"><div class="marquee-track" id="marqueeTrack"></div></div>
     <div class="s-title">기업 리뷰<br>킹받음 티어표</div>
     <div class="s-sub">기업 리뷰를 읽는데, 딱 하나의 정보가 가려져 있다면?<br>어떤 정보가 안 보일 때 제일 킹받는지 배치해보세요.</div>
     <div class="s-field">
@@ -410,8 +446,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
   <div class="done-title">배치 완료!</div>
   <div class="done-sub" id="doneSub"></div>
   <div class="done-btns">
-    <button class="btn-blue" onclick="showScreen('resultsScreen');renderResults();">다른 사람들은 어떻게 했을까?</button>
-    <button class="btn-ghost" style="width:auto;padding:14px 36px;" onclick="showScreen('startScreen');">처음으로</button>
+    <button class="btn-blue" style="width:auto;padding:14px 36px;" onclick="showScreen('startScreen');">처음으로</button>
   </div>
 </div>
 
@@ -445,12 +480,12 @@ const TIERS=[
   {id:'E',label:'하나도 안 킹받음',sub:'있으나 마나',color:'#C3B1E1'},
 ];
 const CASES=[
-  {id:'company',label:'기업명',hint:'어느 회사인지 가려져 있어요',bf:['company']},
-  {id:'score',label:'총점수+별점',hint:'총 평점과 별점이 가려져 있어요',bf:['score','stars']},
-  {id:'title',label:'한줄 요약',hint:'리뷰 제목이 가려져 있어요',bf:['title']},
+  {id:'author',label:'작성자의 정보',hint:'작성자의 정보가 가려져 있어요',bf:['meta']},
+  {id:'score',label:'총점수+별점',hint:'총 평점과 별점이 가려져 있어요',bf:['score','stars','dets']},
+  {id:'title',label:'리뷰 한줄평',hint:'리뷰 한줄평이 가려져 있어요',bf:['title']},
   {id:'pros',label:'장점',hint:'장점 내용이 가려져 있어요',bf:['pros']},
   {id:'cons',label:'단점',hint:'단점 내용이 가려져 있어요',bf:['cons']},
-  {id:'all',label:'모든 정보',hint:'모든 정보가 가려져 있어요',bf:['all']},
+  {id:'mgmt',label:'경영진에 바라는 점',hint:'경영진에 바라는 점이 가려져 있어요',bf:['mgmt']},
 ];
 const RV={
   company:'(주)당근마켓',
@@ -523,7 +558,8 @@ function placeCurrent(tid){
   const c=remaining[0];placements[c.id]=tid;animating=true;
   const card=document.getElementById('currentCard');if(card)card.className='t-card slide-out';
   const ca=document.querySelector(`.tier-row-chips[data-tier="${tid}"]`);
-  const chip=document.createElement('div');chip.className='tier-chip';chip.dataset.caseId=c.id;chip.textContent=c.label;
+  const chip=document.createElement('div');chip.className='tier-chip';chip.dataset.caseId=c.id;
+  chip.innerHTML=`<div class="tier-chip-thumb">${buildRC(c.bf)}</div><div class="tier-chip-label">${c.label}</div><div class="tier-chip-arrows"><button class="tier-chip-arrow" onclick="event.stopPropagation();moveChip('${c.id}','up')">&#9650;</button><button class="tier-chip-arrow" onclick="event.stopPropagation();moveChip('${c.id}','down')">&#9660;</button></div>`;
   chip.addEventListener('click',e=>{e.stopPropagation();removeChip(c.id);});
   chip.addEventListener('mouseenter',onChipEnter);
   chip.addEventListener('mousemove',onChipMove);
@@ -542,19 +578,36 @@ function removeChip(cid){
   if(chip){chip.classList.add('removing');setTimeout(()=>chip.remove(),250);}
   setTimeout(()=>showCard(),300);
 }
+function moveChip(cid,dir){
+  const curTier=placements[cid];
+  const curIdx=TIERS.findIndex(t=>t.id===curTier);
+  const newIdx=dir==='up'?curIdx-1:curIdx+1;
+  if(newIdx<0||newIdx>=TIERS.length)return;
+  placements[cid]=TIERS[newIdx].id;
+  const chip=document.querySelector(`.tier-chip[data-case-id="${cid}"]`);
+  const target=document.querySelector(`.tier-row-chips[data-tier="${TIERS[newIdx].id}"]`);
+  if(chip&&target)target.appendChild(chip);
+}
 function buildRC(bf){
-  const a=bf.includes('all'),b=f=>(a||bf.includes(f))?'blurred':'',d=RV;
+  const b=f=>bf.includes(f)?'blurred':'',d=RV;
   const stars=Array.from({length:5},(_,i)=>`<span class="${i<d.stars?'rc-star-on':'rc-star-off'}">&#9733;</span>`).join('');
   const dets=d.dets.map(x=>`<div class="rc-det"><div class="rc-det-l">${x.l}</div><div class="rc-det-bar"><div class="rc-det-fill" style="width:${x.p}%"></div></div></div>`).join('');
-  return`<div class="rc"><div class="rc-top"><span class="rc-company ${b('company')}">${d.company}</span></div>
-  <div class="rc-meta"><span>${d.job}</span><span class="rc-meta-sep"></span><span>${d.status}</span><span class="rc-meta-sep"></span><span>${d.location}</span><span class="rc-meta-sep"></span><span>${d.date}</span></div>
-  <div class="rc-body"><div class="rc-left"><div class="rc-score ${b('score')}">${d.score}</div><div class="rc-stars ${b('stars')}">${stars}</div><div>${dets}</div></div>
+  return`<div class="rc"><div class="rc-top"><span class="rc-company">${d.company}</span></div>
+  <div class="rc-meta ${b('meta')}"><span>${d.job}</span><span class="rc-meta-sep"></span><span>${d.status}</span><span class="rc-meta-sep"></span><span>${d.location}</span><span class="rc-meta-sep"></span><span>${d.date}</span></div>
+  <div class="rc-body"><div class="rc-left"><div class="rc-score ${b('score')}">${d.score}</div><div class="rc-stars ${b('stars')}">${stars}</div><div class="${b('dets')}">${dets}</div></div>
   <div class="rc-right"><div class="rc-title ${b('title')}">${d.title.replace(/\n/g,'<br>')}</div>
   <div class="rc-sec ${b('pros')}"><span class="rc-tag rc-tag-pro">장점</span><div class="rc-text">${d.pros}</div></div>
   <div class="rc-sec ${b('cons')}"><span class="rc-tag rc-tag-con">단점</span><div class="rc-text">${d.cons}</div></div>
   <div class="rc-sec ${b('mgmt')}"><span class="rc-tag rc-tag-mgmt">경영진에 바라는 점</span><div class="rc-text">${d.mgmt}</div></div>
   <div class="rc-footer"><span>&#8212; ${d.growth}</span><span class="rc-footer-sep"></span><span>&#x1F44D; ${d.recommend}</span></div></div></div></div>`;
 }
+
+// Init marquee
+(function(){
+  const track=document.getElementById('marqueeTrack');
+  const cards=CASES.map(c=>`<div class="marquee-card">${buildRC(c.bf)}<div class="marquee-tag">${c.label} 블라인드</div></div>`).join('');
+  track.innerHTML=cards+cards;
+})();
 
 // ===== CHIP HOVER PREVIEW =====
 const chipPrev=document.getElementById('chipPreview');
