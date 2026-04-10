@@ -64,23 +64,6 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
   cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .2s;
 }
 .btn-ghost:hover{background:#22242A;color:#ECECEC;border-color:#3E4048;}
-/* Mini preview cards floating behind */
-.start-preview{
-  display:flex;gap:12px;margin-bottom:32px;justify-content:center;
-}
-.start-mini{
-  width:80px;height:56px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:700;color:#191B20;
-  animation:floatMini 4s ease-in-out infinite;
-  box-shadow:0 4px 20px rgba(0,0,0,0.15);
-}
-.start-mini:nth-child(2){animation-delay:.5s;}
-.start-mini:nth-child(3){animation-delay:1s;}
-.start-mini:nth-child(4){animation-delay:1.5s;}
-.start-mini:nth-child(5){animation-delay:2s;}
-.start-mini:nth-child(6){animation-delay:2.5s;}
-@keyframes floatMini{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
 
 /* Marquee blinded review cards */
 .start-marquee{
@@ -398,7 +381,6 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#191B20;color:
         <path d="M38,42 Q50,33 66,40" stroke="#F5C518" stroke-width="2" fill="none" stroke-linecap="round"/>
       </svg>
     </div>
-    <div class="start-preview" id="startPreview"></div>
     <div class="start-marquee"><div class="marquee-track" id="marqueeTrack"></div></div>
     <div class="s-title">기업 리뷰<br>킹받음 티어표</div>
     <div class="s-sub">기업 리뷰를 읽는데, 딱 하나의 정보가 가려져 있다면?<br>어떤 정보가 안 보일 때 제일 킹받는지 배치해보세요.</div>
@@ -505,13 +487,6 @@ const CHICK_HI=['와 이건 진짜 킹받는구나?','오 확실히 킹받지!',
 const CHICK_LO=['이건 별로 안 킹받아?','쿨하네~','음 그래?'];
 let currentName='',placements={},cardQueue=[],animating=false;
 
-// Init start preview
-(function(){
-  const el=document.getElementById('startPreview');
-  TIERS.forEach(t=>{
-    el.innerHTML+=`<div class="start-mini" style="background:${t.color}">${t.id}</div>`;
-  });
-})();
 
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
 const nameInput=document.getElementById('nameInput'),startBtn=document.getElementById('startBtn');
